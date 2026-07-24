@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('member_wishlists', function (Blueprint $table) {
             $table->id();
-            $table->string('memberId');
-            $table->string('viewsId');
+            $table->integer('memberId');
+            $table->integer('viewsId');
             $table->timestamps();
         });
     }
