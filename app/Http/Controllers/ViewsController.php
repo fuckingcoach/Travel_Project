@@ -30,7 +30,7 @@ class ViewsController extends Controller
             'city'    => 'required|string|max:20',
             'town'    => 'required|string|max:20',
             'address' => 'required|string|max:100',
-            'typeId'  => 'required|string|max:50', // 景點/文章分類 ID
+            'typeId'  => 'required|integer|min:0', // 景點/文章分類 ID
             'brief'   => 'nullable|string|max:50',  // 簡介（選填）
             'content' => 'nullable|string|max:255',  // 詳細內容（選填）
             'tel'     => 'nullable|string|max:20',   // 電話（選填）
@@ -80,6 +80,35 @@ class ViewsController extends Controller
             'message' => '文章更新成功！',
             'data' => $post
         ]);
+    }
+
+    // U - Update (局部更新)：僅更新前端有傳送的欄位
+    public function patch(Request $req, $id)
+    {
+        // 1. 找到要修改的資料，找不到會直接回傳 404
+        $view = Views::findOrFail($id);
+
+        // 2. 驗證輸入資料（使用 sometimes，表示有傳入才驗證，沒傳入就跳過）
+        $validated = $req->validate([
+            'name'    => 'sometimes|required|string|max:50',
+            'city'    => 'sometimes|required|string|max:20',
+            'town'    => 'sometimes|required|string|max:20',
+            'address' => 'sometimes|required|string|max:100',
+            'typeId'  => 'sometimes|required|integer|min:0',
+            'brief'   => 'sometimes|nullable|string|max:50',
+            'content' => 'sometimes|nullable|string|max:255',
+            'tel'     => 'sometimes|nullable|string|max:20',
+            'like'    => 'sometimes|nullable|integer|min:0',
+        ]);
+
+        // 3. 執行更新（只會更新 $validated 陣列裡有的 key）
+        $view->update($validated);
+
+        // 4. 回傳成功訊息與更新後的完整資料
+        return response()->json([
+            'message' => '景點資料局部更新成功！',
+            'data'    => $view
+        ], 200);
     }
 
     //D - Delete (刪除)：刪除指定 ID 的文章

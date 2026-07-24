@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('city');
             $table->string('town');
             $table->string('address');
-            $table->string('typeId');
+            $table->integer('typeId');
             $table->string('brief');
             $table->string('content');
-            $table->string('tel');
+            $table->string('tel')->nullable();
             $table->integer('like');
             $table->timestamps();
         });
