@@ -4,47 +4,96 @@ namespace App\Http\Controllers;
 
 use App\Models\Member;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class MemberController extends Controller
 {
 
-    // R - Read (清單頁)：取得所有文章
-    public function index()
+    // R - Read : 取得所有會員
+    public function list()
     {
-        // 抓取 SQLite 中最新的文章
-        $posts = Member::latest()->get();
+        // 取得所有會員
+        $members = (new Member())->getMembers();
 
-        // 如果是寫 API，可以直接回傳 JSON：
-        return response()->json($posts);
+        // 回傳json格式
+        // return response()->json($members);
 
-        // 如果是傳統網頁，可以帶給 Blade 畫面：
-        // return view('posts.index', compact('posts'));
+        // 如果要回傳view寫在下面
+        return view("admin.member.list", compact("members"));
     }
 
+    // 導向會員註冊頁面
+    public function create()
+    {
+        // 如果要回傳view寫在下面
+        return view("admin.member.add");
+    }
 
-    //C - Create (新增)：處理資料寫入
+    //C - Create (新增)：處理會員資料寫入
     public function store(Request $req)
-    { // 1. 驗證前端傳過來的欄位資料
-        $validated = $req->validate([
-            'name'    => 'required|string|max:50',
-            'email'    => 'required|string|max:50',
-            'pwd'    => 'required|string|max:50',
-            'tel' => 'required|string|max:50'
-        ]);
+    {
+        // 新增會員
+        $member = new Member();
+        $member->name = $req->name;
+        $member->email = $req->email;
+        $member->pwd = $req->pwd;
+        // 如果未提供電話，設為""
+        $member->tel = ($req->tel ?? "");
+        $member->save();
 
-        // 2. 針對未傳入的選填欄位給予預設值（例如按讚數預設 0）
-        // $validated['like'] = $validated['like'] ?? 0;
-
-        // 3. 寫入資料庫
-        $view = Member::create($validated);
-
-        // 4. 回傳成功訊息與剛建立好的資料 (HTTP Status: 201 Created)
+        // 回傳成功訊息與剛建立好的資料 (HTTP Status: 201 Created)
         return response()->json([
-            'message' => '景點資料建立成功！',
-            'data'    => $view
+            'message' => '會員資料建立成功！',
+            'member'    => $member
         ], 201);
     }
 
+    public function edit(Request $req)
+    {
+        // 尋找會員id
+        $member = Member::find($req->id);
+
+        return view("admin.member.edit", compact("member"));
+    }
+
+
+    //U - Update (更新)：更新會員資料
+    public function update(Request $req)
+    {
+        $memberModel = new Member();
+        if ($memberModel->checkEmail($req))
+        {
+            return back()->withInput()->withErrors(["emailexist" => "信箱已存在，請用其他信箱!"]);
+        }
+
+        $member = Member::find($req->id);
+        $member->memberName = $req->memberName;
+        $member->email = $req->email;
+        $member->tel = $req->tel;
+        $member->update();
+        
+        return redirect("/admin/member/list");
+    }
+
+    //D - Delete (刪除)：刪除指定 ID 的會員
+    public function delete(Request $req)
+    {
+        $ids = $req->id;
+        $msg = "";
+
+        if(!empty($ids)){
+            $msg = "已刪除";
+            foreach($ids as $id){
+                $member = Member::find($id);
+                $member->delete();
+            }
+        }else{
+            $msg = "請選擇要刪除的資料";
+        }
+
+        Session::flash("message",$msg);
+        return redirect("admin/member/list");
+    }
     //R - Read (單篇詳情)：取得指定 ID 的文章
     public function show($id)
     {
@@ -52,42 +101,5 @@ class MemberController extends Controller
         $post = Member::findOrFail($id);
 
         return response()->json($post);
-    }
-
-    //U - Update (更新)：更新指定 ID 的文章
-    public function update(Request $req, $id)
-    {
-        // 1. 找到要修改的文章
-        $post = Member::findOrFail($id);
-
-        // 2. 驗證輸入資料
-        $validated = $req->validate([
-            'name'    => 'required|string|max:50',
-            'email'    => 'required|string|max:50',
-            'pwd'    => 'required|string|max:50',
-            'tel' => 'required|string|max:50'
-        ]);
-
-        // 3. 執行更新
-        $post->update($validated);
-
-        return response()->json([
-            'message' => '文章更新成功！',
-            'data' => $post
-        ]);
-    }
-
-    //D - Delete (刪除)：刪除指定 ID 的文章
-    public function destroy($id)
-    {
-        // 1. 找到文章
-        $post = Member::findOrFail($id);
-
-        // 2. 從 SQLite 刪除
-        $post->delete();
-
-        return response()->json([
-            'message' => '文章刪除成功！'
-        ]);
     }
 }
