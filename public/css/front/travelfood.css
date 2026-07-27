@@ -1,0 +1,308 @@
+/* ==========================================
+   🏛️ 品牌主視覺變數 (Brand CSS Variables)
+   ========================================== */
+:root {
+    --brand: #1B2E5E;
+    --brand-dark: #111E3F;
+    --gold: #C9A84C;
+    --gold-light: #E8D5A3;
+    --bg: #F7F8FA;
+    --white: #FFFFFF;
+    --text: #1A1A2E;
+    --text-muted: #6B7280;
+    --border: #E5E7EB;
+    --radius: 8px;
+    --shadow: 0 2px 12px rgba(27, 46, 94, .08);
+    --shadow-lg: 0 8px 32px rgba(27, 46, 94, .14);
+}
+
+/* 1. 關鍵防閃爍設定：Vue 尚未 mount 前隱藏元素 */
+[v-cloak] {
+    display: none !important;
+}
+
+/* 全域基礎樣式 */
+body {
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+/* 主標題樣式 (下劃金線) */
+.display-3 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--brand);
+    position: relative;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+}
+
+.display-3::after {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 3px;
+    background: var(--gold);
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
+/* ==========================================
+   🔘 統一篩選按鈕樣式 (地區 & 類型通用)
+   ========================================== */
+/* 按鈕左側文字標籤 (固定寬度確保兩排對齊) */
+.filter-label {
+    min-width: 60px;
+    font-weight: 700;
+    color: var(--brand);
+}
+
+/* 未選取狀態 */
+.btn-outline-primary {
+    color: var(--brand) !important;
+    border-color: var(--brand) !important;
+    background-color: var(--white) !important;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+/* Hover 懸停狀態 (金色高亮) */
+.btn-outline-primary:hover {
+    background-color: var(--gold) !important;
+    border-color: var(--gold) !important;
+    color: var(--white) !important;
+    box-shadow: 0 2px 8px rgba(201, 168, 76, 0.3);
+}
+
+/* 已選取狀態 (Active 深藍底) */
+.btn-primary {
+    background-color: var(--brand) !important;
+    border-color: var(--brand) !important;
+    color: var(--white) !important;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(27, 46, 94, 0.2);
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--brand-dark) !important;
+    border-color: var(--brand-dark) !important;
+}
+
+/* ==========================================
+   📊 美食清單與 RWD 表格 (Table & Cards)
+   ========================================== */
+.table-rwd {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border) !important;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+/* 深藍奢華表頭 */
+.table-rwd thead {
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+    color: #ffffff;
+    border-bottom: 2px solid var(--gold);
+}
+
+.table-rwd thead th {
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    padding: 16px 14px;
+    border: none !important;
+    vertical-align: middle;
+}
+
+/* 表格列與動態 Hover 效果 */
+.table-rwd tbody tr {
+    transition: all .2s ease;
+    border-bottom: 1px solid var(--border);
+}
+
+.table-rwd tbody tr:last-child {
+    border-bottom: none;
+}
+
+.table-rwd tbody tr:hover {
+    background: rgba(27, 46, 94, .02); /* 微藍高亮 */
+}
+
+.table-rwd tbody td {
+    padding: 16px 14px;
+    vertical-align: middle;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+    font-size: 14.5px;
+}
+
+/* 編號與名稱強調 */
+.table-rwd tbody td[data-th="編號"] span {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: var(--brand);
+}
+
+.table-rwd tbody td[data-th="名稱"] span {
+    font-weight: 700;
+    color: var(--brand-dark);
+}
+
+/* 圖片展現 (防變形 + 懸停微放大) */
+.table-rwd img {
+    border-radius: var(--radius);
+    max-height: 100px;
+    width: 100%;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+    transition: transform .2s ease;
+}
+
+.table-rwd img:hover {
+    transform: scale(1.04);
+}
+
+/* 未提供圖片標籤 */
+.text-muted {
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(27, 46, 94, .06);
+    color: var(--text-muted);
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+/* 簡介欄位控制最多顯示 3 行 (多餘顯示 ...) */
+.table-rwd tbody td[data-th="簡介"] span {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: var(--text-muted);
+    font-size: 13.5px;
+    line-height: 1.6;
+}
+
+/* ==========================================
+   📖 Vue 分頁控制項 (Pagination)
+   ========================================== */
+.pagination {
+    gap: 6px;
+    margin-bottom: 0;
+}
+
+.pagination .page-item .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 12px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--brand);
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    transition: all .2s ease;
+    cursor: pointer;
+}
+
+.pagination .page-item .page-link:hover {
+    border-color: var(--brand);
+    background: var(--bg);
+    color: var(--brand-dark);
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--brand) !important;
+    color: var(--white) !important;
+    border-color: var(--brand) !important;
+    box-shadow: 0 2px 6px rgba(27, 46, 94, 0.25);
+}
+
+.pagination .page-item.disabled .page-link {
+    opacity: .4;
+    background: #f3f4f6;
+    border-color: var(--border);
+    cursor: not-allowed;
+}
+
+/* ==========================================
+   📱 手機端 (RWD < 768px) 尊榮金框卡片
+   ========================================== */
+@media screen and (max-width: 768px) {
+    .display-3 {
+        font-size: 20px;
+    }
+
+    .table-rwd {
+        background: transparent;
+        box-shadow: none;
+        border: none !important;
+    }
+
+    .table-rwd thead, caption {
+        display: none;
+    }
+
+    /* 手機卡片：頂部 3px 金色奢華邊框 */
+    .table-rwd tbody tr {
+        display: block;
+        background: var(--white);
+        margin-bottom: 18px;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border) !important;
+        border-top: 3px solid var(--gold) !important;
+        padding: 16px;
+    }
+
+    .table-rwd tbody tr:hover {
+        background: var(--white);
+    }
+
+    .table-rwd tbody tr td {
+        display: flex;
+        align-items: flex-start;
+        padding: 10px 0;
+        border: none;
+        border-bottom: 1px dashed var(--border);
+    }
+
+    .table-rwd tbody tr td:last-child {
+        border-bottom: none;
+    }
+
+    /* 左側 RWD 標籤 */
+    .table-rwd tbody tr td::before {
+        content: attr(data-th);
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--brand);
+        width: 65px;
+        flex-shrink: 0;
+        padding-right: 8px;
+    }
+
+    .table-rwd tbody tr td span {
+        flex-grow: 1;
+        width: auto !important;
+    }
+
+    .table-rwd img {
+        max-height: 160px;
+    }
+
+    .table-rwd tbody td[data-th="簡介"] span {
+        -webkit-line-clamp: unset;
+    }
+}

@@ -72,7 +72,7 @@
         @endif
 
         <form action="admin/login" method="post">
-
+            @csrf
             <div class="mb-3">
                 <label class="form-label">帳號</label>
                 <div class="input-group">

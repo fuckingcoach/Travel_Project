@@ -1,0 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap');
+    :root{
+        /* 品牌色 */
+        --color-primary: #2F5D62;
+        --color-secondary: #C9A66B;
+
+        /* 背景色 */
+        --color-bg-page: #F7F5F2;
+        --color-bg-content: #FFFFFF;
+
+        /* 文字色 */
+        --color-text-primary: #1E1E1E;
+        --color-text-secondary: #444444;
+        --color-text-light: #FFFFFF;
+
+        /* 導覽列 */
+        --color-nav-bg: #2F5D62;
+        --color-nav-hover: #C9A66B;
+
+        /* 標題 */
+        --color-heading: #2F5D62;
+        --color-heading-line: #C9A66B;
+
+        /* 按鈕 */
+        --color-btn-primary: #2F5D62;
+        --color-btn-primary-hover: #C9A66B;
+
+        /* Footer */
+        --color-footer-bg: #2F5D62;
+        --color-footer-text: #FFFFFF;
+
+        /* 邊框 */
+        --color-border-accent: #C9A66B;
+
+        /* 陰影 */
+        --color-shadow: rgba(0,0,0,0.08);
+        --color-shadow-btn: rgba(47,93,98,0.25);
+        --color-shadow-btn-hover: rgba(201,166,107,0.35);
+
+        /* Banner 遮罩 */
+        --color-overlay-light: rgba(0,0,0,0.15);
+        --color-overlay-dark: rgba(0,0,0,0.35);
+    }
+/* 字體粗細 */
+    .fw-200{
+        font-weight: 200;
+    }
+    .fw-300{
+        font-weight: 300;
+    }
+    .fw-400{
+        font-weight: 400;
+    }
+    .fw-500{
+        font-weight: 500;
+    }
+    .fw-600{
+        font-weight: 600;
+    }
+    .fw-700{
+        font-weight: 700;
+    }
+    .fw-800{
+        font-weight: 800;
+    }
+    .fw-900{
+        font-weight: 900;
+    }
+/* 字體顏色 */
+.btn-text-primary{
+    color: var(--color-text-primary)
+}
+.btn-text-secondary{
+    color: var(--color-text-secondary)
+}
+
+
+
+/*roller卷軸
+用法
+外層放roller-t roller-b roller-l roller-r
+內層放roller_box*/
+/*由下而上*/
+        .roller-b {
+            position: relative;
+            /*隱藏溢位*/
+            overflow: hidden;
+        }
+
+        .roller-b .roller_box {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            bottom: -100%;
+
+            /*將roller_box的內容置中*/
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            transition: bottom 1s;
+
+            /* 玻璃質感 */
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+
+            /* 玻璃邊框 */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+
+            /* 高光 */
+            box-shadow:
+                inset 0 1px 1px rgba(255, 255, 255, 0.4),
+                0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .roller-b:hover .roller_box {
+            bottom: 0;
+        }
+
+
+        /*由上而下*/
+        .roller-t {
+            position: relative;
+            /*隱藏溢位*/
+            overflow: hidden;
+        }
+
+        .roller-t .roller_box {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: -100%;
+
+            /*將roller_box的內容置中*/
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            transition: top 1s;
+
+            /* 玻璃質感 */
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+
+            /* 玻璃邊框 */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+
+            /* 高光 */
+            box-shadow:
+                inset 0 1px 1px rgba(255, 255, 255, 0.4),
+                0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .roller-t:hover .roller_box {
+            top: 0;
+        }
+
+        /*由左而右*/
+        .roller-l {
+            position: relative;
+            /*隱藏溢位*/
+            overflow: hidden;
+        }
+
+        .roller-l .roller_box {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: -100%;
+            bottom: 0;
+
+            /*將roller_box的內容置中*/
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            transition: left 1s;
+
+            /* 玻璃質感 */
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+
+            /* 玻璃邊框 */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+
+            /* 高光 */
+            box-shadow:
+                inset 0 1px 1px rgba(255, 255, 255, 0.4),
+                0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .roller-l:hover .roller_box {
+            left: 0;
+            bottom: 0;
+        }
+
+
+        /*由右而左*/
+        .roller-r {
+            position: relative;
+            /*隱藏溢位*/
+            overflow: hidden;
+        }
+
+        .roller-r .roller_box {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            right: -100%;
+            bottom: 0;
+
+            /*將roller_box的內容置中*/
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            transition: right 1s;
+
+            /* 玻璃質感 */
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+
+            /* 玻璃邊框 */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+
+            /* 高光 */
+            box-shadow:
+                inset 0 1px 1px rgba(255, 255, 255, 0.4),
+                0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .roller-r:hover .roller_box {
+            right: 0;
+            bottom: 0;
+        }
