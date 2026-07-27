@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('views', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('city');
-            $table->string('town');
-            $table->string('address');
-            $table->string('typeId');
-            $table->string('brief');
-            $table->string('content');
-            $table->string('tel');
-            $table->integer('like');
+            $table->string('name');                                // 必填 (美食/景點名稱)
+            $table->string('city')->nullable();                    // 允許空值
+            $table->string('town')->nullable();                    // 允許空值
+            $table->string('address')->nullable();                 // 允許空值
+            $table->integer('typeId')->default(1);                 // 預設型態 1 (或改為 ->nullable())
+            $table->string('brief')->nullable();                   // 允許空值 (簡介)
+            $table->text('content')->nullable();                   // 建議改為 text 並允許空值 (長文章內容)
+            $table->string('tel')->nullable();                     // 允許空值
+            $table->integer('like')->default(0);                   // 建議給予預設值 0 (按讚數)
             $table->timestamps();
         });
     }

@@ -7,92 +7,102 @@ use Illuminate\Http\Request;
 
 class ViewsController extends Controller
 {
-
-    // R - Read (清單頁)：取得所有文章
+    // R - Read (清單頁)：取得所有資料
     public function index()
     {
-        // 抓取 SQLite 中最新的文章
-        $posts = Views::latest()->get();
+        // 抓取 SQLite 中最新的景點資料
+        $views = Views::latest()->get();
 
-        // 如果是寫 API，可以直接回傳 JSON：
-        return response()->json($posts);
-
-        // 如果是傳統網頁，可以帶給 Blade 畫面：
-        // return view('posts.index', compact('posts'));
+        return response()->json([
+            'status' => 'success',
+            'data'   => $views
+        ], 200);
     }
 
-
-    //C - Create (新增)：處理資料寫入
+    // C - Create (新增)：處理資料寫入
     public function store(Request $req)
-    { // 1. 驗證前端傳過來的欄位資料
+    {
+        // 1. 驗證資料（完全對齊 Migration 欄位規則）
         $validated = $req->validate([
-            'name'    => 'required|string|max:50',
-            'city'    => 'required|string|max:20',
-            'town'    => 'required|string|max:20',
-            'address' => 'required|string|max:100',
-            'typeId'  => 'required|string|max:50', // 景點/文章分類 ID
-            'brief'   => 'nullable|string|max:50',  // 簡介（選填）
-            'content' => 'nullable|string|max:255',  // 詳細內容（選填）
-            'tel'     => 'nullable|string|max:20',   // 電話（選填）
-            'like'    => 'nullable|integer|min:0',   // 按讚數（選填）
+            'name'    => 'required|string|max:100', // 唯一必填欄位
+            'city'    => 'nullable|string|max:50',
+            'town'    => 'nullable|string|max:50',
+            'address' => 'nullable|string|max:255',
+            'typeId'  => 'nullable|integer',         // 整數，資料庫預設為 1
+            'brief'   => 'nullable|string|max:255',
+            'content' => 'nullable|string',          // 長文字內容
+            'tel'     => 'nullable|string|max:30',
+            'like'    => 'nullable|integer|min:0',   // 整數，資料庫預設為 0
         ]);
 
-        // 2. 針對未傳入的選填欄位給予預設值（例如按讚數預設 0）
-        $validated['like'] = $validated['like'] ?? 0;
+        // 2. 針對未傳入的選填欄位補上預設值
+        $validated['typeId'] = $validated['typeId'] ?? 1;
+        $validated['like']   = $validated['like']   ?? 0;
 
         // 3. 寫入資料庫
         $view = Views::create($validated);
 
-        // 4. 回傳成功訊息與剛建立好的資料 (HTTP Status: 201 Created)
+        // 4. 回傳成功 response (HTTP 201 Created)
         return response()->json([
+            'status'  => 'success',
             'message' => '景點資料建立成功！',
             'data'    => $view
         ], 201);
     }
 
-    //R - Read (單篇詳情)：取得指定 ID 的文章
+    // R - Read (單篇詳情)：取得指定 ID 的資料
     public function show($id)
     {
-        // findOrFail: 找不到此 ID 時會自動丟出 404 錯誤
-        $post = Views::findOrFail($id);
+        // findOrFail: 找不到此 ID 時自動拋出 404
+        $view = Views::findOrFail($id);
 
-        return response()->json($post);
+        return response()->json([
+            'status' => 'success',
+            'data'   => $view
+        ], 200);
     }
 
-    //U - Update (更新)：更新指定 ID 的文章
+    // U - Update (更新)：更新指定 ID 的資料
     public function update(Request $req, $id)
     {
-        // 1. 找到要修改的文章
-        $post = Views::findOrFail($id);
+        // 1. 找到要修改的景點
+        $view = Views::findOrFail($id);
 
-        // 2. 驗證輸入資料
+        // 2. 驗證輸入資料（更新時全部使用 nullable，前端沒帶過來的欄位就不更動）
         $validated = $req->validate([
-            'name' => 'required|string|max:30',
-            'city' => 'required|string|max:30',
-            'town' => 'required|string|max:30',
-            'address' => 'required|string|max:30'
+            'name'    => 'sometimes|required|string|max:100', // 如果有傳 name 欄位則不能為空
+            'city'    => 'nullable|string|max:50',
+            'town'    => 'nullable|string|max:50',
+            'address' => 'nullable|string|max:255',
+            'typeId'  => 'nullable|integer',
+            'brief'   => 'nullable|string|max:255',
+            'content' => 'nullable|string',
+            'tel'     => 'nullable|string|max:30',
+            'like'    => 'nullable|integer|min:0',
         ]);
 
         // 3. 執行更新
-        $post->update($validated);
+        $view->update($validated);
 
         return response()->json([
-            'message' => '文章更新成功！',
-            'data' => $post
-        ]);
+            'status'  => 'success',
+            'message' => '景點資料更新成功！',
+            'data'    => $view
+        ], 200);
     }
 
-    //D - Delete (刪除)：刪除指定 ID 的文章
+    // D - Delete (刪除)：刪除指定 ID 的資料
     public function destroy($id)
     {
-        // 1. 找到文章
-        $post = Views::findOrFail($id);
+        // 1. 找到景點
+        $view = Views::findOrFail($id);
 
         // 2. 從 SQLite 刪除
-        $post->delete();
+        $view->delete();
 
         return response()->json([
-            'message' => '文章刪除成功！'
-        ]);
+            'status'  => 'success',
+            'message' => '景點資料刪除成功！'
+        ], 200);
     }
 }
