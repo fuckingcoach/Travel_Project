@@ -10,6 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
+
     <style>
         body {
             min-height: 100vh;
@@ -64,9 +65,7 @@
             font-size: 24px;
         }
     </style>
-
     @yield('css')
-
 </head>
 
 <body>
@@ -125,12 +124,13 @@
             @yield('content')
         </div>
     </div>
-    
-    
-    
+
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const sidebar = document.getElementById('sidebar');
         const toggle = document.getElementById('sidebarToggle');

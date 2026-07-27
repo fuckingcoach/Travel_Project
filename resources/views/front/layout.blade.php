@@ -7,6 +7,7 @@
   <title>@yield("title")</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ asset('css/my.css') }}">
   <link rel="stylesheet" href="/css/front/news.css">
@@ -28,11 +29,11 @@
   @endif
 
   @if (Request::is("/"))
-    @include("front.header")
+  @include("front.header")
   @else
-    @include("front.header2")
+  @include("front.header2")
   @endif
-  
+
   @yield("content")
   <footer>&copy; 2026 AI輔助全端程式與專案設計班. All rights reserved.</footer>
 

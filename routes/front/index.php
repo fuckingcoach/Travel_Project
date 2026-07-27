@@ -7,6 +7,8 @@ use App\Models\ViewsType;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
+include "member.php";
+
 // Route::get("/", [IndexController::class, "index"]);
 // Route::get('/travelfood', function () {
 //     return view('front.travelfood.travelfood');
@@ -26,5 +28,5 @@ Route::get('/views', function () {
     $viewstype = ViewsType::latest()->get();
     $img = Img::latest()->get();
 
-    return view('front.views.views', compact('views','viewstype','img'));
+    return view('front.views.views', compact('views', 'viewstype', 'img'));
 });

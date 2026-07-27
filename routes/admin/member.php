@@ -4,7 +4,7 @@ use App\Http\Controllers\MemberController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(["prefix" => "admin"], function () {
-    Route::group(["prefix" => "member"], function () {
+    Route::group(["prefix" => "member", "middleware" => "manager"], function () {
         Route::get("list", [MemberController::class, "list"]);
         // Route::get("list/{id}", [MemberController::class, "listid"]);
         Route::get("create", [MemberController::class, "create"]);
