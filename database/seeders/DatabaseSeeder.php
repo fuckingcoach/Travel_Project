@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
+<<<<<<< HEAD
         ViewsType::insert([
             [
                 'typeName' => '自然景觀',
@@ -113,6 +114,10 @@ class DatabaseSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+=======
+        $this->call([
+            ManagerSeeder::class,
+>>>>>>> controller/member-wishlist
         ]);
     }
 }

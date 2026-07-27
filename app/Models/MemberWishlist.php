@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class MemberWishlist extends Model
 {
+    public $timestamps = true;
     protected $table = "member_wishlists";
     protected $primaryKey = 'id';
-    protected $fillable = ['memberId', 'viewsId'];
+    protected $fillable = ["id", "memberID", "viewsId", "created_at"];
 }
