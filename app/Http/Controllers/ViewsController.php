@@ -91,7 +91,36 @@ class ViewsController extends Controller
         ], 200);
     }
 
-    // D - Delete (刪除)：刪除指定 ID 的資料
+    // U - Update (局部更新)：僅更新前端有傳送的欄位
+    public function patch(Request $req, $id)
+    {
+        // 1. 找到要修改的資料，找不到會直接回傳 404
+        $view = Views::findOrFail($id);
+
+        // 2. 驗證輸入資料（使用 sometimes，表示有傳入才驗證，沒傳入就跳過）
+        $validated = $req->validate([
+            'name'    => 'sometimes|required|string|max:50',
+            'city'    => 'sometimes|required|string|max:20',
+            'town'    => 'sometimes|required|string|max:20',
+            'address' => 'sometimes|required|string|max:100',
+            'typeId'  => 'sometimes|required|integer|min:0',
+            'brief'   => 'sometimes|nullable|string|max:50',
+            'content' => 'sometimes|nullable|string|max:255',
+            'tel'     => 'sometimes|nullable|string|max:20',
+            'like'    => 'sometimes|nullable|integer|min:0',
+        ]);
+
+        // 3. 執行更新（只會更新 $validated 陣列裡有的 key）
+        $view->update($validated);
+
+        // 4. 回傳成功訊息與更新後的完整資料
+        return response()->json([
+            'message' => '景點資料局部更新成功！',
+            'data'    => $view
+        ], 200);
+    }
+
+    //D - Delete (刪除)：刪除指定 ID 的文章
     public function destroy($id)
     {
         // 1. 找到景點

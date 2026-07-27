@@ -16,5 +16,8 @@ Route::get('/views/{id}', [ViewsController::class, 'show']);
 // 4. 更新文章 (PUT http://localhost/api/posts/1)
 Route::put('/views/{id}', [ViewsController::class, 'update']);
 
+// 4. 更新文章 (PUT http://localhost/api/posts/1)
+Route::patch('/views/patch/{id}', [ViewsController::class, 'patch']);
+
 // 5. 刪除文章 (DELETE http://localhost/api/posts/1)
 Route::delete('/views/{id}', [ViewsController::class, 'destroy']);
