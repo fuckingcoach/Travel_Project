@@ -15,7 +15,8 @@ class MemberController extends Controller
     public function home()
     {
         // 回傳會員中心頁面
-        return view("front.member.home");
+        $member = Member::find(session()->get('memberId'));
+        return view("front.member.home", compact("member"));
     }
 
     // 會員登入頁面
@@ -40,7 +41,7 @@ class MemberController extends Controller
             return back()->withInput()->withErrors(["none" => "帳號或密碼錯誤"]);
         } else {
             session()->put("memberId", $member->id);
-            return view("front.member.home");
+            return redirect("/member/home");
         }
     }
 
@@ -78,5 +79,16 @@ class MemberController extends Controller
         $member->save();
 
         return redirect()->back()->with('success', '註冊成功!');
+    }
+
+    // 會員登出
+    public function logout()
+    {
+        // 全部清除session(暫存)
+        // session()->flush();
+
+        // 清除個別session
+        Session::forget("memberId");
+        return redirect("/member/login");
     }
 }

@@ -6,7 +6,7 @@ use App\Http\Controllers\front\MemberController as fm;  // frontmember 跟adminm
 Route::group(["prefix" => "member"], function () {
     Route::group(["middleware" => "memberlogin"], function () {
         Route::get("home", [fm::class, "home"]);
-        Route::post("logout", [fm::class, "logout"]);
+        Route::get("logout", [fm::class, "logout"]);
         Route::post("update", [fm::class, "update"]);
         Route::get("edit/{id}", [fm::class, "edit"]);
         Route::get("list", [fm::class, "list"]);
