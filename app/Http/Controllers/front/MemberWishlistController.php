@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Front;
 
 use App\Models\MemberWishlist;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
 
 class MemberWishlistController extends Controller
 {

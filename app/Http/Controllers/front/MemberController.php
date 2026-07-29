@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\front;
+namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\Member;
@@ -90,5 +90,24 @@ class MemberController extends Controller
         // 清除個別session
         Session::forget("memberId");
         return redirect("/member/login");
+    }
+
+    public function getFrontMember(Request $req)
+    {
+        $id = session()->get('memberId');
+        $member = Member::find($id);
+        if (empty($member)) {
+            return response()->json([
+                "message" => "未登入"
+            ], 401);
+        }
+        return response()->json([
+            "memberName" => $member->memberName,
+            "email" => $member->email,
+            "tel" => $member->tel,
+            "birthday" => $member->birthday,
+            "address" => $member->address,
+            "status" => $member->status
+        ]);
     }
 }

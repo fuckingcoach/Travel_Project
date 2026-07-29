@@ -74,9 +74,18 @@
     height: 120px;
     object-fit: cover;
     border-radius: 50%;
-    border: 4px solid var(--gold-light);
     display: block;
     margin: 0 auto 1rem;
+}
+
+.member-edit-avatar {
+    width: 240px;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto 1rem;
+    cursor: pointer;
 }
 
 .member-profile h5 {
