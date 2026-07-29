@@ -231,6 +231,7 @@
                 });
         });
 
+
         $(document).on("click", "#back_btn", function() {
             $(".member-page").addClass('d-none');
             $("#member-menu").removeClass('d-none');
