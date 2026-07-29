@@ -19,6 +19,7 @@
   
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <link rel="stylesheet" href="/css/front/header.css">
   @stack("style")
   @stack('script')
 </head>
@@ -34,11 +35,9 @@
   </script>
   @endif
 
-  @if (Request::is("/"))
+
   @include("front.header")
-  @else
-  @include("front.header2")
-  @endif
+
 
   @yield("content")
   <footer>&copy; 2026 AI輔助全端程式與專案設計班. All rights reserved.</footer>
