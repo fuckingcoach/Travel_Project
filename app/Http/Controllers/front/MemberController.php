@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 
+
 class MemberController extends Controller
 {
     // 會員中心頁面

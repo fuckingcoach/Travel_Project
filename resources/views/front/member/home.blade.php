@@ -115,7 +115,7 @@
                         </div>
                     </div>
                     <div class="card-footer bg-transparent border-0 p-4">
-                        <button class="btn btn-secondary w-100 rounded-5" id="back_btn">返回</button>
+                        <button class="btn btn-secondary w-100 rounded-5 back_btn">返回</button>
                     </div>
                 </div>
             </div>
@@ -164,7 +164,7 @@
                                 <hr>
                                 <div class="col-12 mb-3">
                                     <label class="col-4 fw-bold  form-label">地址</label>
-                                    <input type="text" class="form-control" name="edit_address" id="edit_address" value="" placeholder="請輸入會員名稱">
+                                    <input type="text" class="form-control" name="edit_address" id="edit_address">
                                 </div>
                             </div>
                         </div>
@@ -296,6 +296,10 @@
                 $(".member-page").addClass('d-none');
                 $("#member-menu").removeClass('d-none');
             }
+        });
+
+        $(document).on("click", "#save_btn",function(){
+
         });
     });
 

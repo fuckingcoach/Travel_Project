@@ -26,7 +26,6 @@ class MemberFactory extends Factory
             'birthday' => fake()->date(),
             'status' => $this->faker->randomElement(["正常", "未驗證", "停權"]),
             'avatar' => 'default_avatar.png'
-
         ];
     }
 }
