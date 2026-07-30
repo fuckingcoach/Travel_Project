@@ -24,3 +24,8 @@ Route::get('/', function () {
     // 渲染
     return view('front.home', compact('recentViews','foods'));
 });
+
+Route::get('/about', function () {
+
+    return view('front.about');
+});

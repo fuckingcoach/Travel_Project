@@ -11,3 +11,18 @@ Route::get('/travelfood', function () {
 
     return view('front.travelfood.travelfood', compact('foods'));
 });
+
+Route::get('/travelfood/{id}', function (int $id) {
+    $response = Http::get(
+        url('/api/travelfoods')
+    );
+
+    abort_unless($response->successful(), 503);
+
+    $foods = $response->json('data') ?? [];
+
+    return view(
+        'front.travelfood.travelfood_detail',
+        compact('foods', 'id')
+    );
+})->whereNumber('id');
