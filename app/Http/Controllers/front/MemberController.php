@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Upload;
 use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
-use PHPUnit\Framework\Constraint\RegularExpression;
 
 class MemberController extends Controller
 {
@@ -101,13 +101,50 @@ class MemberController extends Controller
                 "message" => "未登入"
             ], 401);
         }
+        return response()->json($member);
+    }
+
+    public function update(Request $req)
+    {
+        //上傳的圖檔
+        $photo = $req->file('edit_avatar');
+        //檔名
+        $filename = "";
+        //如果上傳的圖檔不是空的(有上傳圖)
+        if (!empty($photo)) {
+
+            if (!file_exists("images")) {
+                mkdir("images", 0777);
+            }
+            chmod("images", 0777);
+            chmod("images/member", 0777);
+            $filename =  Upload::uploadPhoto($photo, "images/member", false, "", "", true, 140, 96);
+        }
+
+        // 驗證資料格式
+        try {
+            $validated = $req->validate([
+                'edit_email' => ['required', 'regex:/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/'],
+                'edit_tel' => ['regex:/^[0-9-]*[0-9][0-9-]*$/']
+            ]);
+        } catch (ValidationException) {
+            return response()->json(['error' => '資料格式錯誤!!!']);
+        }
+
+        $member = Member::find($req->edit_id);
+        $member->memberName = $req->edit_name;
+        $member->birthday = $req->edit_birthday;
+        $member->email = $req->edit_email;
+        $member->tel = $req->edit_tel;
+        $member->address = $req->edit_address;
+        if (!empty($photo)) {
+            $member->avatar = $filename;
+        }
+        $member->update();
+
         return response()->json([
-            "memberName" => $member->memberName,
-            "email" => $member->email,
-            "tel" => $member->tel,
-            "birthday" => $member->birthday,
-            "address" => $member->address,
-            "status" => $member->status
+            'message' => '成功修改!',
+            "member" => $member
         ]);
     }
 }

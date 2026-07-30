@@ -8,8 +8,6 @@ Route::group(["prefix" => "member"], function () {
         Route::get("home", [fm::class, "home"]);
         Route::get("logout", [fm::class, "logout"]);
         Route::post("update", [fm::class, "update"]);
-        Route::get("edit/{id}", [fm::class, "edit"]);
-        Route::get("list", [fm::class, "list"]);
     });
 
     Route::group(["middleware" => "guest"], function () {

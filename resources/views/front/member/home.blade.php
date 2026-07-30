@@ -6,15 +6,14 @@
 @endpush
 @section("content")
 <div class="container py-4">
-    <div class="row mb-4">
-
+    <div class="row mb-4" id="member-info">
         <div class="col-lg-3 mb-4 mb-lg-0">
             <div class="member-profile">
                 <div class="member-profile-body">
-                    <img src="/images/default_avatar.png"
-                        class="member-avatar">
-                    <h5>{{ $member->memberName }}</h5>
-                    <p>{{ $member->email }}</p>
+                    <img src=""
+                        class="member-avatar" id="info_avatar">
+                    <h5 class="member_name"></h5>
+                    <p id="member_email"></p>
                 </div>
             </div>
         </div>
@@ -22,9 +21,7 @@
 
         <div class="col-lg-9">
             <div class="member-banner">
-                <h2>
-                    歡迎回來，{{ $member->memberName }}
-                </h2>
+                <h2>歡迎回來，<span class="member_name"></span></h2>
                 <p>
                     管理您的會員資料、收藏景點與帳號安全。
                 </p>
@@ -132,32 +129,37 @@
                     <h2 class="display-6 fw-bold result-title">📝 會員修改</h2>
                 </div>
                 <div class="card shadow-sm rounded-4">
-                    <form action="">
+                    <form id="form_edit" enctype="multipart/form-data">
+                        <input type="hidden" name="edit_id" value="{{ $member->id }}">
+                        @csrf
                         <div class="card-body p-4">
                             <div class="row align-items-center">
                                 <div class="col-md-5">
-                                    <input type="file" id="avatar" class="d-none" accept="image/*">
+                                    <input type="file" id="avatar" class="d-none" accept="image/*" name="edit_avatar">
                                     <label for="avatar">
-                                        <img src="/images/default_avatar.png"
-                                            class="member-edit-avatar">
+                                        <img src=""
+                                            class="member-edit-avatar" id="member_avatar">
                                     </label>
-                                    <!-- <img src="/images/default_avatar.png" class="member-avatar"> -->
                                 </div>
                                 <div class="col-md-7 mb-3">
                                     <label class="col-4 fw-bold  form-label">會員名稱</label>
-                                    <input type="text" class="form-control" name="edit_name" id="edit_name">
+                                    <input type="text" class="form-control" name="edit_name" id="edit_name" required>
                                     <label class="col-4 fw-bold  form-label">生日</label>
                                     <input type="date" class="form-control" name="edit_birthday" id="edit_birthday">
                                 </div>
                                 <hr>
                                 <div class="col-12 mb-3">
                                     <label class="col-4 fw-bold  form-label">電子信箱</label>
-                                    <input type="text" class="form-control" name="edit_email" id="edit_email" value="" placeholder="請輸入會員名稱">
+                                    <input type="text" class="form-control" name="edit_email" id="edit_email" value="" placeholder="請輸入會員名稱" required>
+                                    <div class="valid-feedback">信箱符合規定</div>
+                                    <div class="invalid-feedback">請輸入正確的信箱格式</div>
                                 </div>
                                 <hr>
                                 <div class="col-12 mb-3">
                                     <label class="col-4 fw-bold  form-label">電話</label>
                                     <input type="text" class="form-control" name="edit_tel" id="edit_tel" value="" placeholder="請輸入會員名稱">
+                                    <div class="valid-feedback">電話格式符合</div>
+                                    <div class="invalid-feedback">請輸入正確的電話格式</div>
                                 </div>
                                 <hr>
                                 <div class="col-12 mb-3">
@@ -168,8 +170,8 @@
                         </div>
                         <div class="card-footer">
                             <div class="bg-transparent p-4 d-flex justify-content-around">
-                                <button type="button" class="btn btn-success w-30 rounded-5" id="save_btn">儲存</button>
-                                <button type="button" class="btn btn-secondary w-30 rounded-5" id="back_btn">返回</button>
+                                <button type="submit" class="btn btn-success btn-lg w-30 rounded-5">儲存</button>
+                                <button type="button" class="btn btn-secondary btn-lg w-30 rounded-5" id="back_btn">返回</button>
                             </div>
                         </div>
                     </form>
@@ -180,26 +182,76 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/axios@1.13.2/dist/axios.min.js"></script>
+<script src="/js/jquery.js"></script>
 <script>
     $(function() {
+        loadMember();
         $("#avatar").on("change", function() {
             const file = this.files[0];
             console.log(file);
+
+            if (file) {
+                const url = URL.createObjectURL(file);
+                console.log(url);
+                $(".member-edit-avatar").attr("src", url);
+            }
         });
 
         $("#profile_btn").on("click", function() {
+            $("#name").text(member.memberName);
+            $("#email").text(member.email);
+            $("#tel").text(member.tel);
+            $("#address").text(member.address);
+            $("#birthday").text(member.birthday);
+            $("#status").text(member.status);
+            $("#member-menu").addClass('d-none');
+            $("#member-profile").removeClass('d-none');
+        });
+
+        $("#edit_btn").on("click", function() {
+            $("#edit_name").val(member.memberName);
+            $("#edit_email").val(member.email);
+            $("#edit_tel").val(member.tel);
+            $("#edit_birthday").val(member.birthday);
+            $("#edit_address").val(member.address);
+            $("#edit_status").val(member.status);
+            document.querySelector('.member-edit-avatar').src = '/images/member/' + member.avatar;
+            $("#member-menu").addClass('d-none');
+            $("#member-edit").removeClass('d-none');
+
+        });
+
+        $("#form_edit").on("submit", function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+
             axios
-                .get('/api/member/profile')
+                .post('/api/member/update', formData)
                 .then(function(response) {
                     console.log(response);
-                    $("#name").text(response.data.memberName);
-                    $("#email").text(response.data.email);
-                    $("#tel").text(response.data.tel);
-                    $("#address").text(response.data.address);
-                    $("#birthday").text(response.data.birthday);
-                    $("#status").text(response.data.status);
-                    $("#member-menu").addClass('d-none');
-                    $("#member-profile").removeClass('d-none');
+                    if (response.data.message == '成功修改!') {
+                        Swal.fire({
+                            title: response.data.message,
+                            icon: "success",
+                            showDenyButton: false,
+                            showCancelButton: false,
+                            confirmButtonText: "確定",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $("#member-edit").addClass('d-none');
+                                $("#member-menu").removeClass('d-none');
+                                // 重新讀取會員資料，設定會員新圖片
+                                loadMember();
+
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "修改失敗!",
+                            text: "請檢查資料格式",
+                            icon: "error"
+                        });
+                    }
                 })
                 .catch(function(error) {
                     console.log(error);
@@ -209,33 +261,69 @@
                 });
         });
 
-        $("#edit_btn").on("click", function() {
-            axios
-                .get('/api/member/profile')
-                .then(function(response) {
-                    console.log(response);
-                    $("#edit_name").val(response.data.memberName);
-                    $("#edit_email").val(response.data.email);
-                    $("#edit_tel").val(response.data.tel);
-                    $("#edit_birthday").val(response.data.birthday);
-                    $("#edit_address").val(response.data.address);
-                    $("#edit_status").val(response.data.status);
-                    $("#member-menu").addClass('d-none');
-                    $("#member-edit").removeClass('d-none');
-                })
-                .catch(function(error) {
-                    console.log(error);
-                })
-                .finally(function() {
-                    // always executed
-                });
+        $("#edit_email").on("input", function() {
+            let email = $(this).val();
+            let reg = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+            if (!reg.test(email)) {
+                $(this).removeClass("is-valid");
+                $(this).addClass("is-invalid");
+                flag_email = false;
+            } else {
+                $(this).removeClass("is-invalid");
+                $(this).addClass("is-valid");
+                flag_email = true;
+            }
+        });
+
+        $("#edit_tel").on("input", function() {
+            let tel = $("#tel").val();
+            let reg = /^[0-9-]*[0-9][0-9-]*$/;
+            if (tel === "" || !reg.test(tel)) {
+                $(this).removeClass("is-valid");
+                $(this).addClass("is-invalid");
+                flag_tel = false;
+            } else {
+                $(this).removeClass("is-invalid");
+                $(this).addClass("is-valid");
+                flag_tel = true;
+            }
         });
 
 
         $(document).on("click", "#back_btn", function() {
-            $(".member-page").addClass('d-none');
-            $("#member-menu").removeClass('d-none');
+            if (this.id == "back_btn") {
+                $(".member-page").addClass('d-none');
+                $("#member-menu").removeClass('d-none');
+            }
         });
     });
+
+    function loadMember() {
+        axios
+            .get('/api/member/profile')
+            .then(function(response) {
+                // window   :   javascript全域變數
+                console.log(response.data);
+                window.member = response.data;
+                updateInfo(member.memberName, member.email, member.avatar);
+
+            })
+            .catch(function(error) {
+                console.log(error);
+            })
+            .finally(function() {
+                // always executed
+            });
+    }
+
+    function updateInfo(name, email, avatar) {
+        $(".member_name").text(name);
+        $("#member_email").text(email);
+        $("#info_avatar").attr(
+            "src",
+            "/images/member/" + avatar + "?t=" + Date.now()
+        );
+    }
 </script>
 @endsection

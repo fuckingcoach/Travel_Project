@@ -24,7 +24,8 @@ class MemberFactory extends Factory
             'tel' => fake()->phoneNumber(),
             'address' => fake()->address(),
             'birthday' => fake()->date(),
-            'status' => $this->faker->randomElement(["正常", "未驗證", "停權"])
+            'status' => $this->faker->randomElement(["正常", "未驗證", "停權"]),
+            'avatar' => 'default_avatar.png'
 
         ];
     }
