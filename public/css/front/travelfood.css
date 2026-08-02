@@ -2,21 +2,22 @@
    🏛️ 品牌主視覺變數 (Brand CSS Variables)
    ========================================== */
 :root {
-    --brand: #1B2E5E;
-    --brand-dark: #111E3F;
-    --gold: #C9A84C;
-    --gold-light: #E8D5A3;
-    --bg: #F7F8FA;
+    --brand: #1B2E5E;         /* 主視覺深藍 */
+    --brand-dark: #111E3F;    /* 暗夜藍 */
+    --brand-link: #2C4375;    /* 標題連結專用藍 */
+    --gold: #C9A84C;          /* 質感金 */
+    --gold-hover: #B29135;    /* 深金 (Hover用) */
+    --gold-light: #F9F5EB;    /* 淺金底色 */
+    --bg: #F7F8FA;            /* 頁面背景灰 */
     --white: #FFFFFF;
-    --text: #1A1A2E;
-    --text-muted: #6B7280;
-    --border: #E5E7EB;
+    --text: #222222;          /* 主文字 */
+    --text-muted: #666666;    /* 次要文字 */
+    --border: #E5E7EB;        /* 邊框灰 */
     --radius: 8px;
     --shadow: 0 2px 12px rgba(27, 46, 94, .08);
-    --shadow-lg: 0 8px 32px rgba(27, 46, 94, .14);
 }
 
-/* 1. 關鍵防閃爍設定：Vue 尚未 mount 前隱藏元素 */
+/* 1. 防閃爍設定 */
 [v-cloak] {
     display: none !important;
 }
@@ -51,16 +52,14 @@ body {
 }
 
 /* ==========================================
-   🔘 統一篩選按鈕樣式 (地區 & 類型通用)
+   🔘 篩選按鈕列
    ========================================== */
-/* 按鈕左側文字標籤 (固定寬度確保兩排對齊) */
 .filter-label {
     min-width: 60px;
     font-weight: 700;
     color: var(--brand);
 }
 
-/* 未選取狀態 */
 .btn-outline-primary {
     color: var(--brand) !important;
     border-color: var(--brand) !important;
@@ -69,7 +68,6 @@ body {
     transition: all 0.2s ease;
 }
 
-/* Hover 懸停狀態 (金色高亮) */
 .btn-outline-primary:hover {
     background-color: var(--gold) !important;
     border-color: var(--gold) !important;
@@ -77,7 +75,6 @@ body {
     box-shadow: 0 2px 8px rgba(201, 168, 76, 0.3);
 }
 
-/* 已選取狀態 (Active 深藍底) */
 .btn-primary {
     background-color: var(--brand) !important;
     border-color: var(--brand) !important;
@@ -93,7 +90,7 @@ body {
 }
 
 /* ==========================================
-   📊 美食清單與 RWD 表格 (Table & Cards)
+   📊 景點表格樣式 (桌機端)
    ========================================== */
 .table-rwd {
     background: var(--white);
@@ -105,7 +102,6 @@ body {
     border-spacing: 0;
 }
 
-/* 深藍奢華表頭 */
 .table-rwd thead {
     background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
     color: #ffffff;
@@ -114,25 +110,19 @@ body {
 
 .table-rwd thead th {
     font-weight: 600;
-    font-size: 14px;
+    font-size: 14.5px;
     letter-spacing: 0.5px;
     padding: 16px 14px;
     border: none !important;
     vertical-align: middle;
 }
 
-/* 表格列與動態 Hover 效果 */
 .table-rwd tbody tr {
     transition: all .2s ease;
-    border-bottom: 1px solid var(--border);
-}
-
-.table-rwd tbody tr:last-child {
-    border-bottom: none;
 }
 
 .table-rwd tbody tr:hover {
-    background: rgba(27, 46, 94, .02); /* 微藍高亮 */
+    background: rgba(27, 46, 94, .02);
 }
 
 .table-rwd tbody td {
@@ -143,45 +133,61 @@ body {
     font-size: 14.5px;
 }
 
-/* 編號與名稱強調 */
-.table-rwd tbody td[data-th="編號"] span {
-    font-family: 'Inter', sans-serif;
+/* 🎨 名稱與連結顏色優化 */
+.view-title-link {
+    color: var(--brand-link);
     font-weight: 700;
-    color: var(--brand);
+    font-size: 1.05rem;
+    text-decoration: none;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
 }
 
-.table-rwd tbody td[data-th="名稱"] span {
-    font-weight: 700;
-    color: var(--brand-dark);
+.view-title-link:hover {
+    color: var(--gold-hover);
+    text-decoration: underline;
 }
 
-/* 圖片展現 (防變形 + 懸停微放大) */
-.table-rwd img {
-    border-radius: var(--radius);
-    max-height: 100px;
+/* 類型 Badge 樣式 (輕奢灰金格調) */
+.type-badge {
+    display: inline-block;
+    font-size: 12px;
+    color: #8C6D1F;
+    background-color: var(--gold-light);
+    border: 1px solid #E2D3AB;
+    padding: 2px 10px;
+    border-radius: 12px;
+}
+
+/* 🖼️ 圖片 6:4 比例設定 */
+.img-aspect-6-4 {
     width: 100%;
+    max-width: 130px;
+    aspect-ratio: 6 / 4; /* 強制 6:4 比例 */
     object-fit: cover;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
-    transition: transform .2s ease;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    display: block;
 }
 
-.table-rwd img:hover {
+.img-aspect-6-4:hover {
+    opacity: 0.88;
     transform: scale(1.04);
 }
 
-/* 未提供圖片標籤 */
-.text-muted {
+/* 無圖片預設框 */
+.no-img-box {
+    background: #F3F4F6;
+    color: #9CA3AF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 12px;
-    font-weight: 500;
-    background: rgba(27, 46, 94, .06);
-    color: var(--text-muted);
-    padding: 4px 12px;
-    border-radius: 20px;
-    display: inline-block;
+    border: 1px solid var(--border);
 }
 
-/* 簡介欄位控制最多顯示 3 行 (多餘顯示 ...) */
-.table-rwd tbody td[data-th="簡介"] span {
+/* 簡介欄位 3 行截斷 (桌機端) */
+.brief-text {
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -191,8 +197,13 @@ body {
     line-height: 1.6;
 }
 
+.tel-text {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
 /* ==========================================
-   📖 Vue 分頁控制項 (Pagination)
+   📖 分頁 (Pagination)
    ========================================== */
 .pagination {
     gap: 6px;
@@ -213,31 +224,16 @@ body {
     border: 1.5px solid var(--border);
     background: var(--white);
     transition: all .2s ease;
-    cursor: pointer;
-}
-
-.pagination .page-item .page-link:hover {
-    border-color: var(--brand);
-    background: var(--bg);
-    color: var(--brand-dark);
 }
 
 .pagination .page-item.active .page-link {
     background: var(--brand) !important;
     color: var(--white) !important;
     border-color: var(--brand) !important;
-    box-shadow: 0 2px 6px rgba(27, 46, 94, 0.25);
-}
-
-.pagination .page-item.disabled .page-link {
-    opacity: .4;
-    background: #f3f4f6;
-    border-color: var(--border);
-    cursor: not-allowed;
 }
 
 /* ==========================================
-   📱 手機端 (RWD < 768px) 尊榮金框卡片
+   📱 手機端 (RWD < 768px) 完美對齊極簡卡片
    ========================================== */
 @media screen and (max-width: 768px) {
     .display-3 {
@@ -250,59 +246,68 @@ body {
         border: none !important;
     }
 
-    .table-rwd thead, caption {
+    .table-rwd thead {
         display: none;
     }
 
-    /* 手機卡片：頂部 3px 金色奢華邊框 */
+    /* 手機卡片主體 */
     .table-rwd tbody tr {
         display: block;
         background: var(--white);
-        margin-bottom: 18px;
+        margin-bottom: 16px;
         border-radius: var(--radius);
         box-shadow: var(--shadow);
         border: 1px solid var(--border) !important;
         border-top: 3px solid var(--gold) !important;
-        padding: 16px;
+        padding: 6px 14px;
     }
 
-    .table-rwd tbody tr:hover {
-        background: var(--white);
-    }
-
+    /* 單欄 tr td 的絕對對齊 Flex 結構 */
     .table-rwd tbody tr td {
-        display: flex;
-        align-items: flex-start;
-        padding: 10px 0;
-        border: none;
-        border-bottom: 1px dashed var(--border);
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: flex-start !important; /* 確保頂端完全對齊 */
+        padding: 10px 0 !important;
+        border: none !important;
+        border-bottom: 1px dashed var(--border) !important;
+        text-align: left !important;
     }
 
     .table-rwd tbody tr td:last-child {
-        border-bottom: none;
+        border-bottom: none !important;
     }
 
-    /* 左側 RWD 標籤 */
+    /* 左側 RWD 標籤 (絕對固定 65px 寬度) */
     .table-rwd tbody tr td::before {
         content: attr(data-th);
-        font-size: 13px;
+        font-size: 13.5px;
         font-weight: 700;
         color: var(--brand);
         width: 65px;
+        min-width: 65px;
+        max-width: 65px;
         flex-shrink: 0;
         padding-right: 8px;
+        line-height: 1.5;
+        margin-top: 2px; /* 微調標籤對齊第一行文字 */
     }
 
-    .table-rwd tbody tr td span {
-        flex-grow: 1;
-        width: auto !important;
+    /* 右側內容容器 (彈性自動占滿右側空間) */
+    .table-rwd tbody tr td .td-content {
+        flex: 1 1 auto !important;
+        min-width: 0 !important; /* 防止文字溢出破版 */
+        width: 100%;
     }
 
-    .table-rwd img {
-        max-height: 160px;
+    /* 手機端圖片保持 6:4 比例且維持合適大小 */
+    .table-rwd tbody tr td[data-th="圖片"] .img-aspect-6-4 {
+        width: 120px !important;
+        max-width: 120px !important;
     }
 
-    .table-rwd tbody td[data-th="簡介"] span {
-        -webkit-line-clamp: unset;
+    /* 手機端簡介文字完整展開 */
+    .brief-text {
+        -webkit-line-clamp: unset !important;
+        display: block !important;
     }
 }
