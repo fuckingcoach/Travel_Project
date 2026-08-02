@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('memberName', 20);
             $table->string('email', 50)->unique();
-            $table->string('pwd', 30);
+            $table->string('pwd', 255);
             $table->string('tel', 20)->nullable();
             $table->string('address', 50)->nullable();
             $table->string('birthday');

@@ -11,4 +11,4 @@ Route::get('/user', function (Request $request) {
 include 'api/views.php';
 include 'api/views_types.php';
 include 'api/imgs.php';
-include 'api/memberhome.php';
+include 'api/memberapi.php';

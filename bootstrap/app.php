@@ -18,9 +18,16 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             "manager" => CheckAdmin::class,
-            "memberlogin" => CheckMember::class,
-            "guest" => CheckGuest::class
         ]);
+
+        $middleware->redirectGuestsTo(function (Request $request) {
+            return route('member.login');
+        });
+
+        $middleware->redirectUsersTo(function (Request $request) {
+            return route('member.home');
+        });
+        $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

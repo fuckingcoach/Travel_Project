@@ -1,14 +1,14 @@
 <div id="topbar">
   <a href="/member/home"><i class="fa fa-user-circle"></i> 會員中心</a>
   <span class="sep">|</span>
-  @if (empty(session()->get("memberId")))
+  @if (!Auth::check())
   <a href="/member/login"><i class="fa fa-sign-in-alt"></i> 登入</a>
   @endif
   <span class="sep">|</span>
   <a href="/member/register"><i class="fa fa-user-plus"></i> 加入會員</a>
   <span class="sep">|</span>
-  @if (!empty(session()->get("memberId")))
-  <a href="/member/logout" onclick="return confirm('確定要登出？')"><i class="fa fa-sign-out-alt"></i> 登出</a>
+  @if (Auth::check())
+  <a href="#" id="logout_btn" onclick="return confirm('確定要登出？')"><i class="fa fa-sign-out-alt"></i> 登出</a>
   @endif
 </div>
 

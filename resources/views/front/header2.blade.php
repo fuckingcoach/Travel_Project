@@ -1,8 +1,8 @@
 <div class="d-top">
-    @if (!empty(session()->get("memberId")))
+    @if (Auth::check())
     <a href="/member/home"><i class="fa fa-user-circle"></i> 會員中心</a>
     <span>|</span>
-    <a href="/member/logout"><i class="fa fa-sign-out-alt"></i> 登出</a>
+    <a href="#" id="logout_btn"><i class="fa fa-sign-out-alt"></i> 登出</a>
     @else
     <a href="/member/register"><i class="fa fa-user-circle"></i> 註冊 </a>
     <span>|</span>

@@ -4,6 +4,7 @@ use App\Http\Controllers\ViewsController;
 use App\Models\Img;
 use App\Models\Views;
 use App\Models\ViewsType;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
@@ -22,11 +23,14 @@ Route::get('/travelfood', function () {
     return view('front.travelfood.travelfood', compact('foods'));
 });
 
-Route::get('/views', function () {
-    // 直接走 Eloquent ORM，速度最快且不會有轉字串代價
-    $views = Views::latest()->get();
-    $viewstype = ViewsType::latest()->get();
-    $img = Img::latest()->get();
 
-    return view('front.views.views', compact('views', 'viewstype', 'img'));
+Route::middleware('auth')->group(function(){
+    Route::get('/views', function () {
+        // 直接走 Eloquent ORM，速度最快且不會有轉字串代價
+        $views = Views::latest()->get();
+        $viewstype = ViewsType::latest()->get();
+        $img = Img::latest()->get();
+    
+        return view('front.views.views', compact('views', 'viewstype', 'img'));
+    });
 });

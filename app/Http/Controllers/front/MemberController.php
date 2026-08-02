@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use App\Models\Upload;
 use App\Models\Member;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 
@@ -16,8 +15,7 @@ class MemberController extends Controller
     public function home()
     {
         // 回傳會員中心頁面
-        $member = Member::find(session()->get('memberId'));
-        return view("front.member.home", compact("member"));
+        return view("front.member.home");
     }
 
     // 會員登入頁面
@@ -27,29 +25,74 @@ class MemberController extends Controller
         return view("front.member.login");
     }
 
-    // 會員登入
-    public function doLogin(Request $req)
-    {
-        // 驗證碼確認
-        if (captcha_check($req->code) == false) {
-            return back()->withInput()->withErrors(["code" => "認證碼錯誤"]);
-            exit;
-        }
-        // 查詢會員
-        $member = Member::where('email', $req->email)->where('pwd', $req->pwd)->first();
-
-        if (empty($member)) {
-            return back()->withInput()->withErrors(["none" => "帳號或密碼錯誤"]);
-        } else {
-            session()->put("memberId", $member->id);
-            return redirect("/member/home");
-        }
-    }
-
     // 會員註冊頁面
     public function register()
     {
         return view("front.member.register");
+    }
+
+    // 會員登入
+    public function doLogin(Request $req)
+    {
+
+        // 驗證碼確認
+        if (captcha_check($req->code) == false) {
+            return response()->json(["errors" => "認證碼錯誤"],401);
+        }
+
+        // // 查詢會員
+        // $member = Member::where('email', $req->email)->where('pwd', $req->pwd)->first();
+
+        // if (empty($member)) {
+        //     return back()->withInput()->withErrors(["none" => "帳號或密碼錯誤"]);
+        // } else {
+        //     session()->put("memberId", $member->id);
+        //     return redirect("/member/home");
+        // }
+
+        //手動處理登入
+        // $member = Member::where('email',$req->email)->first();
+
+        // if (!$member || !Hash::check($req->pwd, $member->pwd)){
+        //     return response()->json([
+        //         'errormsg' => '帳號密碼錯誤'
+        //     ], 401);
+        // }
+
+        // Auth::login($member);
+
+        // Auth 處理登入
+        if (!Auth::attempt([
+            'email' => $req->email,
+            'password' => $req->pwd
+        ])) {
+            return response()->json([
+                'errors' => '帳號密碼錯誤'
+            ], 401);
+        }
+
+        $req->session()->regenerate();
+
+        return response()->json([
+            'message' => '登入成功'
+        ]);
+    }
+
+    // 會員登出
+    public function logout(Request $req)
+    {
+        // 全部清除session(暫存)
+        // session()->flush();
+        // 清除個別session
+        // Session::forget("memberId");
+
+        //改用Auth
+        Auth::logout();
+        $req->session()->invalidate();
+        $req->session()->regenerateToken();
+        return response()->json([
+            "message" => "logout success"
+        ]);
     }
 
     // 會員註冊
@@ -63,13 +106,26 @@ class MemberController extends Controller
                 'tel' => ['regex:/^[0-9-]*[0-9][0-9-]*$/']
             ]);
         } catch (ValidationException) {
-            return back()->withInput()->withErrors(['error' => '資料格式錯誤!']);
+            return response()->json([
+                'success' => false,
+                'errors' => '資料格式錯誤!'
+            ]);
         }
 
         // 驗證碼
         $code = $req->code;
         if (!captcha_check($code)) {
-            return back()->withInput()->withErrors(['code' => '驗證碼錯誤!']);
+            return response()->json([
+                'success' => false,
+                'errors' => '驗證碼錯誤!'
+            ]);
+        }
+
+        if (Member::checkEmail($req->email)) {
+            return response()->json([
+                'success' => false,
+                "errors" => "信箱已存在，請用其他信箱!"
+            ]);
         }
 
         $member = new Member();
@@ -77,75 +133,15 @@ class MemberController extends Controller
         $member->email = $req->email;
         $member->pwd = $req->pwd;
         $member->tel = $req->tel;
+        $member->address = "";
+        $member->birthday = "";
+        $member->avatar = "default_avatar.png";
+        $member->status = "未驗證";
         $member->save();
 
-        return redirect()->back()->with('success', '註冊成功!');
-    }
-
-    // 會員登出
-    public function logout()
-    {
-        // 全部清除session(暫存)
-        // session()->flush();
-
-        // 清除個別session
-        Session::forget("memberId");
-        return redirect("/member/login");
-    }
-
-    public function getFrontMember(Request $req)
-    {
-        $id = session()->get('memberId');
-        $member = Member::find($id);
-        if (empty($member)) {
-            return response()->json([
-                "message" => "未登入"
-            ], 401);
-        }
-        return response()->json($member);
-    }
-
-    public function update(Request $req)
-    {
-        //上傳的圖檔
-        $photo = $req->file('edit_avatar');
-        //檔名
-        $filename = "";
-        //如果上傳的圖檔不是空的(有上傳圖)
-        if (!empty($photo)) {
-
-            if (!file_exists("images")) {
-                mkdir("images", 0777);
-            }
-            chmod("images", 0777);
-            chmod("images/member", 0777);
-            $filename =  Upload::uploadPhoto($photo, "images/member", false, "", "", true, 140, 96);
-        }
-
-        // 驗證資料格式
-        try {
-            $validated = $req->validate([
-                'edit_email' => ['required', 'regex:/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/'],
-                'edit_tel' => ['regex:/^[0-9-]*[0-9][0-9-]*$/']
-            ]);
-        } catch (ValidationException) {
-            return response()->json(['error' => '資料格式錯誤!!!']);
-        }
-
-        $member = Member::find($req->edit_id);
-        $member->memberName = $req->edit_name;
-        $member->birthday = $req->edit_birthday;
-        $member->email = $req->edit_email;
-        $member->tel = $req->edit_tel;
-        $member->address = $req->edit_address;
-        if (!empty($photo)) {
-            $member->avatar = $filename;
-        }
-        $member->update();
-
-        return response()->json([
-            'message' => '成功修改!',
-            "member" => $member
+        return  response()->json([
+            'success' => true,
+            'message' => '註冊成功!'
         ]);
     }
 }
