@@ -86,11 +86,11 @@ class ApiMemberController extends Controller
 
         $member = Auth::user();
         // 驗證舊密碼
-        if (!Hash::check($req->oldpwd, $member->pwd)){
+        if (!Hash::check($req->oldpwd, $member->pwd)) {
             return response()->json([
                 'success' => false,
                 'message' => '目前密碼錯誤'
-            ],400);
+            ], 400);
         }
 
         // 更新密碼
@@ -101,5 +101,4 @@ class ApiMemberController extends Controller
             'message' => '密碼修改成功'
         ]);
     }
-
 }

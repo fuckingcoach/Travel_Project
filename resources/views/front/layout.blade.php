@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="{{ asset('css/my.css') }}">
   <link rel="stylesheet" href="/css/front/news.css">
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/sweetAert2.css">
+  <!-- <link rel="stylesheet" href="/css/sweetAert2.css"> -->
   <script src="https://code.jquery.com/jquery-4.0.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

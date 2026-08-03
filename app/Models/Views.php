@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 
 class Views extends Model
 {
@@ -29,7 +30,7 @@ class Views extends Model
         return $this->belongsTo(ViewsType::class, "typeId");
     }
 
-        // 用id取上一則
+    // 用id取上一則
     public function prevViews(int $id)
     {
         // first():取第一筆
@@ -66,6 +67,15 @@ class Views extends Model
         // SELECT b.typeName, count(a.id) AS news_count FROM news a INNER JOIN news_type b ON a.typeId = b.id GROUP BY b.typeName
         $list = ViewsType::withCount("views")->get();
 
+        return $list;
+    }
+
+    // 取得所有景點及類別
+    public function getAllViews($type = null, $keywords = null)
+    {
+        $list = DB::table("$this->table AS a")
+            ->selectRaw("a.id, a.name, a.city, a.town, a.address, a.brief, a.content, a.tel, a.like, b.typeName,(SELECT imgSrc FROM imgs WHERE viewsId = a.id LIMIT 1) AS imgSrc")
+            ->leftJoin("views_types AS b", "a.typeId", "b.id");
         return $list;
     }
 }

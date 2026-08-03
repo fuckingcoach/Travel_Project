@@ -4,9 +4,11 @@
 <div class="app-content">
     <div class="container-fluid">
         <div class="card">
+
             <div class="card-header">
                 <div class="display-5  fw-900 text-center">會員管理</div>
             </div>
+
             <div class="card-body">
                 <form action="delete" method="post" name="form1" id="form1">
                     @csrf

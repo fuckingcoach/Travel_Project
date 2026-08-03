@@ -262,6 +262,8 @@
 <script>
     let flag_tel = false;
     let flag_pwd = false;
+    axios.defaults.withCredentials = true;
+    axios.defaults.withXSRFToken = true;
     $(function() {
         loadMember();
         $("#avatar").on("change", function() {
@@ -448,7 +450,7 @@
                         title: error.response.data.message,
                         icon: "error"
                     });
-                }else{
+                } else {
                     Swal.fire({
                         title: "系統錯誤",
                         text: "請稍後再試",

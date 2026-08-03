@@ -37,7 +37,7 @@ class MemberController extends Controller
 
         // 驗證碼確認
         if (captcha_check($req->code) == false) {
-            return response()->json(["errors" => "認證碼錯誤"],401);
+            return response()->json(["errors" => "認證碼錯誤"], 401);
         }
 
         // // 查詢會員
