@@ -5,158 +5,157 @@
 @endsection
 
 @push("style")
-<link rel="stylesheet" href="{{ asset('css/front/travelfood.css') }}">
+<link rel="stylesheet" href="{{ asset('css/front/views.css') }}">
+
 @endpush
 
 @section("content")
+<!-- 1. 滿版視覺 Hero Header -->
+<div class="travel-hero text-center mb-4">
+    <h1 class="title mb-2">旅遊景點指南</h1>
+    <p class="mb-0 text-white-50">探索台灣在地風光、熱門景點與絕美好去處</p>
+</div>
+
 <div id="app" class="container my-4" v-cloak>
-    <div class="display-3 text-center fw-bold mb-4">旅遊景點指南</div>
 
-    <!-- 1. 地區篩選按鈕列 -->
-    <div class="d-flex align-items-center justify-content-start gap-2 my-2 flex-wrap">
-        <span class="filter-label fw-bold">地區：</span>
-        <button
-            type="button"
-            class="btn"
-            :class="selectedRegion === 'all' ? 'btn-primary' : 'btn-outline-primary'"
-            @click="setRegion('all')">
-            全部地區
-        </button>
-        <button
-            v-for="region in ['北部', '中部', '南部', '東部']"
-            :key="region"
-            type="button"
-            class="btn"
-            :class="selectedRegion === region ? 'btn-primary' : 'btn-outline-primary'"
-            @click="setRegion(region)">
-            @{{ region }}
-        </button>
-    </div>
 
-    <!-- 2. 景點類型篩選按鈕列 -->
-    <div class="d-flex align-items-center justify-content-start gap-2 my-2 flex-wrap">
-        <span class="filter-label fw-bold">類型：</span>
-        <button
-            type="button"
-            class="btn"
-            :class="selectedType === 'all' ? 'btn-primary' : 'btn-outline-primary'"
-            @click="setType('all')">
-            全部類型
-        </button>
-        <button
-            v-for="type in types"
-            :key="type.id"
-            type="button"
-            class="btn"
-            :class="selectedType !== 'all' && Number(selectedType) === Number(type.id) ? 'btn-primary' : 'btn-outline-primary'"
-            @click="setType(type.id)">
-            @{{ type.typeName }}
-        </button>
-    </div>
 
-    <!-- 每頁顯示筆數設定 -->
-    <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
-        <div class="d-flex align-items-center">
-            <label for="dataPerPage" class="fw-bold me-2">每頁顯示</label>
-            <select id="dataPerPage" v-model.number="pageSize" class="form-select form-select-sm me-2" style="width: 100px;">
-                <option :value="5">5</option>
-                <option :value="10">10</option>
-                <option :value="20">20</option>
-                <option :value="50">50</option>
-            </select>
-            <span>筆 (共 @{{ filteredFoods.length }} 筆資料)</span>
+    <!-- 2. 篩選與控制面板 -->
+    <div class="filter-card mb-4">
+        <!-- 地區篩選按鈕列 -->
+        <div class="d-flex align-items-center justify-content-start gap-2 my-2 flex-wrap">
+            <span class="filter-label fw-bold text-dark me-2">地區：</span>
+            <button
+                type="button"
+                class="btn filter-btn"
+                :class="selectedRegion === 'all' ? 'btn-primary' : 'btn-outline-primary'"
+                @click="setRegion('all')">
+                全部地區
+            </button>
+            <button
+                v-for="region in ['北部', '中部', '南部', '東部']"
+                :key="region"
+                type="button"
+                class="btn filter-btn"
+                :class="selectedRegion === region ? 'btn-primary' : 'btn-outline-primary'"
+                @click="setRegion(region)">
+                @{{ region }}
+            </button>
+        </div>
+
+        <hr class="my-3 border-light-subtle">
+
+        <!-- 景點類型篩選按鈕列 -->
+        <div class="d-flex align-items-center justify-content-start gap-2 my-2 flex-wrap">
+            <span class="filter-label fw-bold text-dark me-2">類型：</span>
+            <button
+                type="button"
+                class="btn filter-btn"
+                :class="selectedType === 'all' ? 'btn-primary' : 'btn-outline-primary'"
+                @click="setType('all')">
+                全部類型
+            </button>
+            <button
+                v-for="type in types"
+                :key="type.id"
+                type="button"
+                class="btn filter-btn"
+                :class="selectedType !== 'all' && Number(selectedType) === Number(type.id) ? 'btn-primary' : 'btn-outline-primary'"
+                @click="setType(type.id)">
+                @{{ type.typeName }}
+            </button>
         </div>
     </div>
 
-    <!-- 表格區域 (新增切版規格：編號 / 名稱 / 圖片 / 地址 / 簡介) -->
-    <div class="table-responsive">
-        <table class="table mt-3 table-bordered align-middle text-center table-rwd">
-            <thead class="table-dark">
-                <tr>
-                    <th style="width: 8%;">編號</th>
-                    <th style="width: 20%;">名稱</th>
-                    <th style="width: 15%;">圖片</th>
-                    <th style="width: 22%;">地址</th>
-                    <th style="width: 35%;">簡介</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <!-- Vue 動態渲染列表 -->
-                <tr v-for="(item, index) in pageData" :key="item.id || index">
-                    <!-- 1. 編號 -->
-                    <td data-th="編號">
-                        <div class="td-content fw-bold text-brand">
-                            @{{ (currentPage - 1) * pageSize + index + 1 }}
-                        </div>
-                    </td>
-
-                    <!-- 2. 名稱 (點擊跳轉) -->
-                    <td data-th="名稱">
-                        <div class="td-content">
-                            <a :href="'/views/' + item.id" class="view-title-link">
-                                @{{ item.name || '未提供名稱' }}
-                            </a>
-                            <div class="mt-1">
-                                <span class="type-badge">
-                                    @{{ getTypeName(item.typeId) }}
-                                </span>
-                            </div>
-                        </div>
-                    </td>
-
-                    <!-- 3. 圖片 (6:4 橫向黃金比例) -->
-                    <td data-th="圖片">
-                        <div class="td-content">
-                            <template v-if="item.imgs && item.imgs.length > 0 && item.imgs[0].imgSrc">
-                                <img
-                                    :src="'/images/views/S/' + item.imgs[0].imgSrc"
-                                    :alt="item.name"
-                                    class="img-aspect-6-4 shadow-sm border"
-                                    title="點擊檢視大圖"
-                                    @click="openLightbox(item.imgs)">
-                            </template>
-                            <template v-else>
-                                <div class="no-img-box img-aspect-6-4">
-                                    暫無圖片
-                                </div>
-                            </template>
-                        </div>
-                    </td>
-
-                    <!-- 4. 地址 -->
-                    <td data-th="地址">
-                        <div class="td-content">
-                            <div class="address-text">
-                                <template v-if="item.city || item.town">
-                                    @{{ item.city || '' }} @{{ item.town || '' }}<br>
-                                </template>
-                                @{{ item.address || '未提供地址' }}
-                            </div>
-                            <div v-if="item.tel" class="tel-text mt-1">
-                                📞 @{{ item.tel }}
-                            </div>
-                        </div>
-                    </td>
-
-                    <!-- 5. 簡介 -->
-                    <td data-th="簡介">
-                        <div class="td-content brief-text">
-                            @{{ item.brief || item.content || '未提供簡介' }}
-                        </div>
-                    </td>
-                </tr>
-
-                <!-- 無資料時顯示 -->
-                <tr v-if="pageData.length === 0">
-                    <td colspan="5" class="text-center py-4 text-muted">目前沒有符合條件的相關資料</td>
-                </tr>
-            </tbody>
-        </table>
+    <!-- 3. 工具列（每頁筆數與統計） -->
+    <div class="d-flex justify-content-between align-items-center mb-3 px-1">
+        <div class="text-secondary small fw-bold">
+            找到 <span class="text-primary fs-6">@{{ filteredFoods.length }}</span> 個符合條件的景點
+        </div>
+        <div class="d-flex align-items-center">
+            <label for="dataPerPage" class="small text-secondary fw-bold me-2">每頁顯示</label>
+            <select id="dataPerPage" v-model.number="pageSize" class="form-select form-select-sm" style="width: 90px;">
+                <option :value="6">6</option>
+                <option :value="9">9</option>
+                <option :value="12">12</option>
+                <option :value="24">24</option>
+            </select>
+        </div>
     </div>
 
-    <!-- 頁碼 Pagination -->
-    <nav v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
+    <!-- 4. 景點卡片圖文網格 (Grid Layout) -->
+    <div class="row g-4">
+        <!-- 景點動態卡片 -->
+        <div v-for="(item, index) in pageData" :key="item.id || index" class="col-12 col-md-6 col-lg-4">
+            <div class="view-card">
+
+                <!-- 圖片封面 (6:4 比例，點擊開 Lightbox) -->
+                <div class="view-card-img-wrapper" @click="openLightbox(item.imgs)">
+                    <template v-if="item.imgs && item.imgs.length > 0 && item.imgs[0].imgSrc">
+                        <img
+                            :src="'/images/views/S/' + item.imgs[0].imgSrc"
+                            :alt="item.name"
+                            class="view-card-img"
+                            title="點擊放大檢視相簿">
+                    </template>
+                    <template v-else>
+                        <div class="d-flex align-items-center justify-content-center h-100 text-muted small">
+                            暫無圖片
+                        </div>
+                    </template>
+
+                    <!-- 分類 Badge -->
+                    <span class="view-card-badge">
+                        @{{ getTypeName(item.typeId) }}
+                    </span>
+                </div>
+
+                <!-- 卡片內文資訊 -->
+                <div class="view-card-body">
+                    <a :href="'/views/' + item.id" class="view-card-title text-truncate" :title="item.name">
+                        @{{ item.name || '未提供名稱' }}
+                    </a>
+
+                    <div class="view-card-address">
+                        <i class="fa fa-map-marker-alt text-danger me-1"></i>
+                        <template v-if="item.city || item.town">
+                            @{{ item.city || '' }} @{{ item.town || '' }}
+                        </template>
+                        @{{ item.address || '' }}
+                    </div>
+
+                    <div class="view-card-desc">
+                        @{{ item.brief || item.content || '未提供景點簡介資訊。' }}
+                    </div>
+
+                    <!-- 卡片底部導航頁 -->
+                    <div class="view-card-footer">
+                        <span v-if="item.tel" class="small text-muted">
+                            📞 @{{ item.tel }}
+                        </span>
+                        <span v-else class="small text-muted">📍 景點資訊</span>
+
+                        <a :href="'/views/' + item.id" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                            查看詳情 <i class="fa fa-chevron-right ms-1" style="font-size: 10px;"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 無資料時提示 -->
+        <div v-if="pageData.length === 0" class="col-12 text-center py-5">
+            <div class="p-5 bg-white rounded-3 border text-muted shadow-sm">
+                <i class="fa fa-search fa-3x mb-3 text-secondary"></i>
+                <h5 class="fw-bold">找不到符合條件的景點</h5>
+                <p class="small text-secondary mb-0">嘗試切換地區或景點類型看看吧！</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. 頁碼 Pagination -->
+    <nav v-if="totalPages > 1" class="d-flex justify-content-center mt-5">
         <ul class="pagination">
             <li class="page-item" :class="{ disabled: currentPage === 1 }">
                 <button type="button" class="page-link" @click="changePage(currentPage - 1)">上一頁</button>
@@ -174,28 +173,22 @@
         </ul>
     </nav>
 
-
-    <!-- 6. Lightbox Modal (彈窗展示所有圖片，位置在 /images/views/) -->
+    <!-- 6. Lightbox Modal 彈窗 -->
     <div class="modal fade" id="lightboxModal" tabindex="-1" aria-hidden="true" ref="lightboxModalRef">
-        <!-- modal-dialog-centered 負責整個彈窗的垂直置中 -->
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content bg-dark text-white border-0 shadow-lg">
                 <div class="modal-header border-secondary p-2 px-3">
-                    <h6 class="modal-title fst-italic">圖片檢視</h6>
+                    <h6 class="modal-title fst-italic">景點圖片展演</h6>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <!-- 移除 p-0，讓內容滿版 -->
                 <div class="modal-body p-0 bg-black rounded-bottom">
                     <div id="lightboxCarousel" class="carousel slide" data-bs-ride="false">
-
-                        <!-- 圖片主體區域 -->
                         <div class="carousel-inner">
                             <div
                                 v-for="(img, idx) in activeImages"
                                 :key="img.id || idx"
                                 class="carousel-item"
                                 :class="{ active: idx === 0 }">
-
                                 <div class="d-flex justify-content-center align-items-center w-100" style="min-height: 50vh; max-height: 80vh; padding: 20px;">
                                     <img
                                         :src="'/images/views/' + img.imgSrc"
@@ -206,7 +199,6 @@
                             </div>
                         </div>
 
-                        <!-- 切換按鈕 (僅在多張圖片時顯示) -->
                         <template v-if="activeImages.length > 1">
                             <button class="carousel-control-prev" type="button" data-bs-target="#lightboxCarousel" data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
@@ -216,8 +208,6 @@
                                 <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
                                 <span class="visually-hidden">下一張</span>
                             </button>
-
-                            <!-- 選項：加入圖片指示器 (Indicators) -->
                             <div class="carousel-indicators">
                                 <button
                                     v-for="(img, idx) in activeImages"
@@ -236,17 +226,17 @@
             </div>
         </div>
     </div>
+
 </div>
 
+<!-- 腳本引入 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
 <script>
-    // 取得後端傳入資料
     const viewsData = @json($views ?? []);
     const typesData = @json($viewstype ?? []);
 
-    // 1. 接收來自 URL 參數的預設篩選值
     const defaultType = @json($selectedType ?? 'all');
     const defaultRegion = @json($selectedRegion ?? 'all');
 
@@ -263,14 +253,13 @@
             const views = ref(viewsData);
             const types = ref(typesData);
 
-            // 2. 初始值綁定 URL 參數
             const selectedRegion = ref(defaultRegion);
             const selectedType = ref(defaultType !== 'all' ? Number(defaultType) : 'all');
 
-            const pageSize = ref(10);
+            // 調整預設每頁顯示筆數為 9 (3x3 網格視覺最協調)
+            const pageSize = ref(9);
             const currentPage = ref(1);
 
-            // Lightbox 相關變數
             const activeImages = ref([]);
             const lightboxModalRef = ref(null);
             let bsModal = null;
@@ -281,7 +270,6 @@
                 }
             });
 
-            // 台灣縣市與分區對照表
             const regionMap = {
                 '北部': ['臺北市', '台北市', '新北市', '基隆市', '宜蘭縣', '桃園市', '新竹市', '新竹縣'],
                 '中部': ['苗栗縣', '臺中市', '台中市', '彰化縣', '南投縣', '雲林縣'],
@@ -289,7 +277,6 @@
                 '東部': ['花蓮縣', '臺東縣', '台東縣']
             };
 
-            // 雙重條件過濾
             const filteredFoods = computed(() => {
                 return views.value.filter(item => {
                     let matchRegion = true;
@@ -323,7 +310,6 @@
                 return filteredFoods.value.slice(start, end);
             });
 
-            // 無刷新更新網址列
             const updateUrlQuery = () => {
                 const params = new URLSearchParams();
                 if (selectedRegion.value !== 'all') {

@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/css/googleFont.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/fontAwesome.css">
   <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ asset('css/my.css') }}">
   <link rel="stylesheet" href="/css/front/news.css">
@@ -19,6 +20,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios@1.13.2/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="/css/front/header.css">
   @stack("style")
   @stack('script')
 </head>
@@ -34,11 +36,9 @@
   </script>
   @endif
 
-  @if (Request::is("/"))
+
   @include("front.header")
-  @else
-  @include("front.header2")
-  @endif
+
 
   @yield("content")
   <footer>&copy; 2026 AI輔助全端程式與專案設計班. All rights reserved.</footer>
