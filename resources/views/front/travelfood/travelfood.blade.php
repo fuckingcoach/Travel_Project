@@ -61,7 +61,7 @@
             <!-- Vue 動態渲染列表 -->
             <tr v-for="(item, index) in pageData" :key="index">
                 <td data-th="編號"><span>@{{ (currentPage - 1) * pageSize + index + 1 }}</span></td>
-                <td data-th="名稱"><span>@{{ item.Name || '未提供名稱' }}</span></td>
+                <td data-th="名稱"><span><a :href="'/travelfood/' + item.id">@{{ item.Name || '未提供名稱' }}</a></span></td>
                 <td data-th="圖片">
                     <span>
                         <img v-if="item.PicURL" :src="item.PicURL" class="img-fluid" :alt="item.Name">
