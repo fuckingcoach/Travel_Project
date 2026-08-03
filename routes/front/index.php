@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\Views\FrontViewsController;
 use App\Http\Controllers\ViewsController;
 use App\Models\Img;
@@ -12,20 +13,19 @@ use Illuminate\Support\Facades\Route;
 include "travelfood.php";
 include "views.php";
 
-Route::get('/', function () {
-    // 查詢景點資料
-    $recentViews = Views::with(['imgs', 'types'])
-        ->latest()
-        ->take(6)
-        ->get();
-    $response = Http::get('https://data.moa.gov.tw/Service/OpenData/ODwsv/ODwsvTravelFood.aspx?IsTransData=1&UnitId=193');
-    $foods = $response->json() ?? [];
+// Route::get('/', function () {
+//     // 查詢景點資料
+//     $recentViews = Views::with(['imgs', 'types'])
+//         ->latest()
+//         ->take(6)
+//         ->get();
+//     $response = Http::get('https://data.moa.gov.tw/Service/OpenData/ODwsv/ODwsvTravelFood.aspx?IsTransData=1&UnitId=193');
+//     $foods = $response->json() ?? [];
 
-    // 渲染
-    return view('front.home', compact('recentViews','foods'));
-});
+//     // 渲染
+//     return view('front.home', compact('recentViews','foods'));
+// });
 
-Route::get('/about', function () {
+Route::get('/',[HomeController::class,"tfv"]);
 
-    return view('front.about');
-});
+Route::get('/about', function () {return view('front.about');});
