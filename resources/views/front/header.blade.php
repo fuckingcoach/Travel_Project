@@ -1,53 +1,106 @@
-<div id="topbar">
-    <a href="/member/home"><i class="fa fa-user-circle"></i> 會員中心</a>
-    <span class="sep">|</span>
+<!-- ===== Topbar ===== -->
+<div id="topbar" class="d-top">
+  <div class="container-fluid d-flex justify-content-end align-items-center flex-wrap">
+    <a href="/member/home">
+      <i class="fa fa-user-circle"></i>
+      <span>會員中心</span>
+    </a>
+
     @if (empty(session()->get("memberId")))
-    <a href="/member/login"><i class="fa fa-sign-in-alt"></i> 登入</a>
+    <span class="sep">|</span>
+
+    <a href="/member/login">
+      <i class="fa fa-sign-in-alt"></i>
+      <span>登入</span>
+    </a>
     @endif
+
     <span class="sep">|</span>
-    <a href="/member/register"><i class="fa fa-user-plus"></i> 加入會員</a>
-    <span class="sep">|</span>
+
+    <a href="/member/register">
+      <i class="fa fa-user-plus"></i>
+      <span>加入會員</span>
+    </a>
+
     @if (!empty(session()->get("memberId")))
-    <a href="#" onclick="return confirm('確定要登出？')"><i class="fa fa-sign-out-alt"></i> 登出</a>
+    <span class="sep">|</span>
+
+    <a href="/member/logout"
+      onclick="return confirm('確定要登出？')">
+      <i class="fa fa-sign-out-alt"></i>
+      <span>登出</span>
+    </a>
     @endif
   </div>
+</div>
 
-  <!-- ===== Navbar ===== -->
-  <nav id="navbar">
-    <a href="/" class="nav-logo">
-      <div class="logo-box">B</div>
-      <span class="logo-text">品牌名稱</span>
+<!-- ===== Navbar ===== -->
+<nav class="navbar navbar-expand-lg d-nav">
+  <div class="container-fluid">
+
+    <!-- Logo -->
+    <a href="/" class="lb">
+      Logo
     </a>
-    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">
-      <i class="fa fa-bars"></i>
+
+    <!-- 品牌名稱 -->
+    <a href="/" class="navbar-brand brand">
+      島嶼漫遊
+    </a>
+
+    <!-- 手機版漢堡按鈕 -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#mainNavbar"
+      aria-controls="mainNavbar"
+      aria-expanded="false"
+      aria-label="開啟導覽選單">
+      <span class="navbar-toggler-icon"></span>
     </button>
-    <ul class="nav-links">
-      <li>
-        <a href="/news"><i class="fa fa-newspaper" style="font-size:13px"></i> 最新消息</a>
-        <!--
-        <ul class="dropdown">
-          <li><a href="news-list.html?cat=1">公司公告</a></li>
-          <li><a href="news-list.html?cat=2">活動資訊</a></li>
-          <li><a href="news-list.html?cat=3">產品動態</a></li>
-        </ul>
-        -->
-      </li>
-      <li>
-        <a href="/product"><i class="fa fa-box-open" style="font-size:13px"></i> 產品介紹</a>
-        <!--
-        <ul class="dropdown">
-          <li><a href="products-list.html?cat=1">系列一</a></li>
-          <li><a href="products-list.html?cat=2">系列二</a></li>
-          <li><a href="products-list.html?cat=3">系列三</a></li>
-        </ul>-->
-      </li>
-      <li><a href="/events"><i class="fa fa-history" style="font-size:13px"></i> 大事記</a></li>
-      <li><a href="/about"><i class="fa fa-building" style="font-size:13px"></i> 關於我們</a></li>
-      <li><a href="/member/home"><i class="fa fa-user" style="font-size:13px"></i> 會員中心</a></li>
-    </ul>
-    <a href="/cart" class="nav-cart">
-      <i class="fa fa-shopping-cart"></i>
-      <span>購物車</span>
-      <span class="cart-badge" id="cart-badge">3</span>
-    </a>
-  </nav>
+
+    <!-- 可收合內容 -->
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <div class="navbar-nav links">
+        <a
+          href="/views"
+          class="nav-link {{ Request::is('views*') ? 'active' : '' }}">
+          景點探索
+        </a>
+
+        <a
+          href="/travelfood"
+          class="nav-link {{ Request::is('travelfood*') ? 'active' : '' }}">
+          地方美食
+        </a>
+
+        <a
+          href="/events"
+          class="nav-link {{ Request::is('events*') ? 'active' : '' }}">
+          旅遊靈感
+        </a>
+
+        <a
+          href="/about"
+          class="nav-link {{ Request::is('about*') ? 'active' : '' }}">
+          認識台灣
+        </a>
+
+        @if (!empty(session()->get("memberId")))
+        <a
+          href="/member/home"
+          class="nav-link {{ Request::is('member*') ? 'active' : '' }}">
+          會員中心
+        </a>
+        @endif
+      </div>
+
+      <a href="/cart" class="cart">
+        <i class="fa fa-shopping-cart"></i>
+        <span>收藏清單</span>
+        <span class="cart-badge" id="cart">3</span>
+      </a>
+    </div>
+  </div>
+</nav>
