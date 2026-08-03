@@ -75,5 +75,21 @@
         </div>
     </div>
 </div>
-
+<script>
+    doDelete(formId)
+    {
+        Swal.fire({
+            title: "確定刪除?",
+            icon: "question",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "確定",
+            denyButtonText: "取消"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.forms[formId].submit();
+            }
+        });
+    };
+</script>
 @endsection

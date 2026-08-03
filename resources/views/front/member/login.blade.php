@@ -107,7 +107,7 @@
                 console.log(response);
 
                 //登入成功，導向首頁
-                // window.location.href = '/views';
+                window.location.href = '/views';
             } catch (error) {
                 $("#captcha").trigger('click');
                 console.error("登入失敗", error);

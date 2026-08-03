@@ -60,27 +60,26 @@
 
             <!-- 3. 圖片上傳 -->
             <div class="row g-3 mb-3">
-                <div class="col-md-8">
-                    <div class="col-1 text-center">
-                        <label class="form-label">現有產品圖</label>
-                    </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">現有景點圖</label>
                     <div class="d-flex flex-wrap gap-3">
-                        @forelse($product->images as $photo)
-                        <div class="text-center border p-2" id="photo{{ $photo->id }}">
-                            <a href="/images/product/{{ $photo->photo }}" data-lightbox="產品圖" data-title="{{ $product->itemNname }}">
-                                <img src="/images/product/S/{{ $photo->photo }}">
-                            </a>
-                            <div class="text-center mt-3">
-                                <button type="button" class="btn btn-danger" onclick="delPhoto('{{ $photo->id }}');return false">刪除</button>
-                            </div>
-                        </div>
-                        @empty
-                        <div class="text-danger">目前沒有產品圖</div>
-                        @endforelse
+                        <template v-if="imgs.length > 0">
+                            <template v-for="img in imgs">
+                                <div class="text-center border p-2" :id="'img' + img.id">
+                                    <a :href="'/images/views/' + img.imgSrc" data-lightbox="景點圖" :data-title="viewsname">
+                                        <img :src="'/images/views/S/' + img.imgSrc" style="width:100px;height:50px">
+                                    </a>
+                                    <div class="text-center mt-3">
+                                        <button type="button" class="btn btn-danger" @click="delImg(img.id)">刪除</button>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                        <template v-else>
+                            <div class="text-danger">目前沒有景點圖</div>
+                        </template>
                     </div>
                 </div>
-
-                <!-- 📸 新增：景點圖片多檔上傳 -->
                 <div class="col-md-4">
                     <label for="imgs" class="form-label fw-bold">景點圖片 (可多選)</label>
                     <input type="file" class="form-control" name="imgs[]" id="imgs" accept="image/*" multiple>
@@ -127,7 +126,8 @@
                 selectedArea: '',
                 viewsaddress: '',
                 viewsbrief: '',
-                viewscontent: ''
+                viewscontent: '',
+                imgs: []
             }
         },
         methods: {
@@ -173,7 +173,7 @@
                 const formElement = document.getElementById('form_views');
                 let formData = new FormData(formElement);
 
-                axios.post('store', formData)
+                axios.patch('/admin/views/update', formData)
                     .then(function(response) {
                         console.log(response);
 
@@ -182,7 +182,7 @@
                             icon: "success",
                             confirmButtonText: "確認",
                         }).then((result) => {
-                            location.href = "list";
+                            location.href = "/admin/views/list";
                         });
                     })
                     .catch(function(error) {
@@ -221,6 +221,8 @@
                         vm.viewsaddress = view.address;
                         vm.viewsbrief = view.brief;
                         vm.viewscontent = view.content;
+                        vm.imgs = view.imgs ?? [];
+                        console.log(vm.imgs);
                     })
                     .catch(function(error) {
                         console.log(error);
@@ -229,6 +231,36 @@
                         // always executed
                     });
             },
+            delImg(imgId) {
+                let imgDiv = $("#img" + imgId);
+                Swal.fire({
+                    title: "確定刪除?",
+                    icon: "question",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "確定",
+                    denyButtonText: "取消"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios.delete('/api/imgs/' + imgId)
+                            .then(function(response) {
+                                imgDiv.remove();
+                                Swal.fire({
+                                    title: response.data.message,
+                                    icon: 'success',
+                                    confirmButtonText: "確定",
+
+                                });
+                            })
+                            .catch(function(error) {
+                                console.log(error);
+                            })
+                            .finally(function() {
+                                // always executed
+                            });
+                    }
+                });
+            }
 
         },
         computed: {

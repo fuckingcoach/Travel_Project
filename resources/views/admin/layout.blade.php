@@ -77,10 +77,10 @@
         </button>
 
         <div class="d-flex align-items-center">
-            <i class="bi bi-speedometer2 fs-3 me-2"></i>
-            <span class="navbar-brand mb-0 h5">
+            <i class="bi bi-speedometer2 fs-3 me-2 text-light"></i>
+            <a href="/admin/home" class="navbar-brand mb-0  fw-bold">
                 後台管理系統
-            </span>
+            </a>
         </div>
 
         <form method="POST" action="/logout">
