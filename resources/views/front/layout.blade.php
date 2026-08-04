@@ -14,13 +14,13 @@
   <link rel="stylesheet" href="{{ asset('css/my.css') }}">
   <link rel="stylesheet" href="/css/front/news.css">
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/sweetAert2.css">
+  <link rel="stylesheet" href="/css/front/header.css">
+  <!-- <link rel="stylesheet" href="/css/sweetAert2.css"> -->
   <script src="https://code.jquery.com/jquery-4.0.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"></script>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <link rel="stylesheet" href="/css/front/header.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.13.2/dist/axios.min.js"></script>
   @stack("style")
   @stack('script')
 </head>
@@ -44,5 +44,24 @@
   <footer>&copy; 2026 AI輔助全端程式與專案設計班. All rights reserved.</footer>
 
 </body>
+<script>
+  axios.defaults.withCredentials = true;
+  axios.defaults.withXSRFToken = true;
+  $(function() {
+    $("#logout_btn").on("click", async function(e) {
+      e.preventDefault();
+
+      try {
+        let res = await axios.post(
+          "/member/logout"
+        );
+        console.log(res.data);
+        location.href = "/views";
+      } catch (error) {
+        console.log(error.response);
+      }
+    });
+  });
+</script>
 
 </html>

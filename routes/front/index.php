@@ -6,6 +6,7 @@ use App\Http\Controllers\ViewsController;
 use App\Models\Img;
 use App\Models\Views;
 use App\Models\ViewsType;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;

@@ -41,13 +41,11 @@
                         <h3 class="mb-0 text-center">會員註冊</h3>
                     </div>
                     <div class="card-body p-4">
-                        <form action="/member/store" method="POST">
+                        <form action="#" method="POST" id="form_register">
                             <div class="row g-3">
 
                                 <!-- 錯誤訊息 -->
-                                @if($errors->has("error"))
-                                <div class="alert alert-danger mt-1 mb-0 text-center col-md-12">{{ $errors->first('error') }}</div>
-                                @endif
+                                <!-- <div class="alert alert-danger mt-1 mb-0 text-center col-md-12" id="errormsg"></div> -->
 
                                 <!-- 會員名稱 -->
                                 <div class="col-md-12">
@@ -106,7 +104,7 @@
                                         </div>
 
                                         <div class="col-5 text-end">
-                                            <img src="/captcha/flat" class="img-fluid border rounded" style="height:38px; cursor:pointer;" onclick="this.src='/captcha/flat?'+Math.random()">
+                                            <img src="/captcha/flat" id="captcha" class="img-fluid border rounded" style="height:38px; cursor:pointer;" onclick="this.src='/captcha/flat?'+Math.random()">
                                         </div>
                                     </div>
                                 </div>
@@ -125,24 +123,6 @@
         </div>
     </div>
 </div>
-@if (session('success'))
-<script>
-    Swal.fire({
-        title: '註冊成功！',
-        text: '{{ session("success") }}',
-        icon: 'success',
-        confirmButtonText: '確定',
-        confirmButtonColor: '#198754', // 按鈕顏色
-        allowOutsideClick: false, // 防止點擊背景關閉
-        allowEscapeKey: false // 防止按 Esc 關閉
-    }).then((result) => {
-        /* 當使用者按下「確定」按鈕後，才會執行這裡的轉址 */
-        if (result.isConfirmed) {
-            window.location.href = "{{ url('/member/login') }}"; // 替換為你想跳轉的目標路由
-        }
-    });
-</script>
-@endif
 <script>
     $(function() {
         let flag_memberName = false;
@@ -228,19 +208,60 @@
         if ($("#email").val()) $("#email").trigger("input");
         if ($("#tel").val()) $("#tel").trigger("input");
 
-        $("form").on("submit", function(e) {
+        $("#form_register").on("submit", async function(e) {
+            e.preventDefault();
             // 表單送出前再確認一次格式正確
             $("input[name='memberName']").trigger("input");
             $("#email").trigger("input");
             $("#pwd").trigger("input");
             $("#pwd_confirmed").trigger("input");
             $("#tel").trigger("input");
-            if (!(flag_email && flag_pwd && flag_pwd_confirmed && flag_tel && flag_memberName)) {
-                // 預防表單送出
-                e.preventDefault();
-                alert("欄位錯誤，請修正");
 
+            if (!(flag_email && flag_pwd && flag_pwd_confirmed && flag_tel && flag_memberName)) {
+                alert("欄位錯誤，請修正");
                 return false;
+            }
+
+            try {
+                let csrf = await axios.get('/sanctum/csrf-cookie');
+
+                console.log("csrf成功", csrf);
+
+                const formData = new FormData(this);
+                const response = await axios.post('/member/store', formData);
+                console.log(response);
+
+                if(response.data.success)
+                {
+                    Swal.fire({
+                        title: response.data.message,
+                        icon: "success",
+                        confirmButtonText: "確定",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                        }
+                    });
+                }else{
+                    $("#captcha").trigger('click');
+                    Swal.fire({
+                        title: response.data.errors,
+                        icon: "error",
+                        confirmButtonText: "確定",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                        }
+                    });
+                }
+            }catch(error){
+                console.error("登入失敗", error);
+
+                // 5. 處理後端驗證錯誤或驗證碼錯誤 (HTTP 422)
+                if (error.response && error.response.status === 422) {
+                    const errors = error.response.data.errors;
+                    console.log(error);
+                } else {
+                    console.log(error);
+                }
             }
         });
 

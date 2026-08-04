@@ -4,9 +4,11 @@
 <div class="app-content">
     <div class="container-fluid">
         <div class="card">
+
             <div class="card-header">
                 <div class="display-5  fw-900 text-center">會員管理</div>
             </div>
+
             <div class="card-body">
                 <form action="delete" method="post" name="form1" id="form1">
                     @csrf
@@ -18,9 +20,10 @@
                             <td class="col-1 text-center border border-dark">id</td>
                             <td class="col-2 text-center border border-dark">會員名稱</td>
                             <td class="col-2 text-center border border-dark">電子信箱</td>
-                            <td class="col-2 text-center border border-dark">電話</td>
+                            <td class="col-1 text-center border border-dark">狀態</td>
                             <td class="col-2 text-center border border-dark">建立時間</td>
-                            <td class="col-2 text-center border border-dark">修改/刪除</td>
+                            <td class="col-2 text-center border border-dark">更新時間</td>
+                            <td class="col-1 text-center border border-dark">修改/刪除</td>
                         </tr>
                         <tbody id="list">
                             @include("admin.member.getList")

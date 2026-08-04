@@ -12,3 +12,4 @@ include 'api/views.php';
 include 'api/views_types.php';
 include 'api/imgs.php';
 include 'api/travelfood.php';
+include 'api/memberapi.php';

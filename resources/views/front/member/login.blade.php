@@ -42,12 +42,10 @@
                             <h2 class="fw-bold">會員登入</h2>
                             <p class="text-muted">歡迎回來，開始您的旅程</p>
                         </div>
-                        <form action="/member/doLogin" method="post">
-                            @if($errors->has("none"))
-                            <div class="text-danger text-center">{{ $errors->first('none') }}</div>
-                            @endif
+                        <form action="" method="post" id="form_login">
+                            <div class="text-danger text-center" id="errormsg"></div>
                             <div class="mb-3 form-floating">
-                                <input type="text" name="email" value="{{ old('email') }}" class="form-control form-control-lg" placeholder="">
+                                <input type="text" name="email" class="form-control form-control-lg" placeholder="">
                                 <label class="form-label">帳號:</label>
                             </div>
 
@@ -67,13 +65,9 @@
                                 </div>
 
                                 <div class="col-5 text-end">
-                                    <img src="/captcha/flat" class="img-fluid border rounded" style="max-height:70px; cursor:pointer;" onclick="this.src='/captcha/flat?'+Math.random()">
+                                    <img src="/captcha/flat" id="captcha" class="img-fluid border rounded" style="max-height:70px; cursor:pointer;" onclick="this.src='/captcha/flat?'+Math.random()">
                                 </div>
                             </div>
-                            @if($errors->has("code"))
-                            <div class="text-danger text-start">{{ $errors->first('code') }}</div>
-                            @endif
-
                             <div class="d-grid mt-4">
                                 <button type="submit" class="btn btn-success btn-lg">登入</button>
                             </div>
@@ -89,4 +83,49 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(function() {
+        axios.defaults.withCredentials = true;
+        $('#form_login').on("submit", async function(e) {
+            e.preventDefault();
+
+            const email = $('input[name="email"]').val();
+            const pwd = $('input[name="pwd"]').val();
+            const code = $('input[name="code"]').val();
+
+            try {
+                let csrf = await axios.get('/sanctum/csrf-cookie');
+
+                console.log("csrf成功", csrf);
+
+                const response = await axios.post('/member/doLogin', {
+                    email,
+                    pwd,
+                    code
+                });
+                console.log(response);
+
+                //登入成功，導向首頁
+                window.location.href = '/views';
+            } catch (error) {
+                $("#captcha").trigger('click');
+                console.error("登入失敗", error);
+                // 處理 HTTP 401
+                $("#errormsg").text(error.response.data.errors);
+
+
+                // 5. 處理後端驗證錯誤或驗證碼錯誤 (HTTP 422)
+                if (error.response && error.response.status === 422) {
+                    const errors = error.response.data.errors;
+                    console.log(error);
+                } else {
+                    console.log(error);
+                }
+                // 失敗時重新整理驗證碼
+                $('.img-fluid').trigger('click');
+            }
+        });
+    });
+</script>
 @endsection

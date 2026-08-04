@@ -19,9 +19,13 @@ class MemberFactory extends Factory
     {
         return [
             'memberName' => fake()->name(),
-            'email' =>fake()->unique()->email(),
-            'pwd' => fake()->unique()->password(10,30),
-            'tel' =>fake()->phoneNumber(),
+            'email' => fake()->unique()->safeEmail(),
+            'pwd' => bcrypt('password'),
+            'tel' => fake()->phoneNumber(),
+            'address' => fake()->address(),
+            'birthday' => fake()->date(),
+            'status' => $this->faker->randomElement(["正常", "未驗證", "停權"]),
+            'avatar' => 'default_avatar.png'
         ];
     }
 }

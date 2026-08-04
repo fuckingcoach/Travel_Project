@@ -22,9 +22,10 @@ class ImgController extends Controller
     }
 
 
-    //C - Create (新增)：處理資料寫入
+    // 新增景點圖片
     public function store(Request $req)
-    { // 1. 驗證前端傳過來的欄位資料
+    {
+        // 1. 驗證前端傳過來的欄位資料
 
 
         // 2. 針對未傳入的選填欄位給予預設值（例如按讚數預設 0）
@@ -66,17 +67,17 @@ class ImgController extends Controller
         ]);
     }
 
-    //D - Delete (刪除)：刪除指定 ID 的文章
+    //D - Delete (刪除)：刪除指定 ID 的圖片
     public function destroy($id)
     {
-        // 1. 找到文章
+        // 1. 找到圖片
         $post = Img::findOrFail($id);
 
         // 2. 從 SQLite 刪除
         $post->delete();
 
         return response()->json([
-            'message' => '文章刪除成功！'
+            'message' => '圖片刪除成功！'
         ]);
     }
 }

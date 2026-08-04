@@ -54,7 +54,7 @@ class ViewsController extends Controller
     public function show($id)
     {
         // findOrFail: 找不到此 ID 時自動拋出 404
-        $view = Views::findOrFail($id);
+        $view = Views::with(['imgs', 'types'])->findOrFail($id);
 
         return response()->json([
             'status' => 'success',

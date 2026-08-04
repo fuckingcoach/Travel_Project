@@ -1,21 +1,18 @@
 <?php
 
+use App\Http\Controllers\Api\ApiMemberController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\front\MemberController as fm;  // frontmember 跟adminmember區隔開
+use App\Http\Controllers\Front\MemberController as fm;  // frontmember 跟adminmember區隔開
 
 Route::group(["prefix" => "member"], function () {
-    Route::group(["middleware" => "memberlogin"], function () {
-        Route::get("home", [fm::class, "home"]);
-        Route::post("logout", [fm::class, "logout"]);
-        Route::post("update", [fm::class, "update"]);
-        Route::get("edit/{id}", [fm::class, "edit"]);
-        Route::get("list", [fm::class, "list"]);
-    });
-
-    Route::group(["middleware" => "guest"], function () {
-        Route::get("login", [fm::class, "login"]);
-        Route::post("doLogin", [fm::class, "doLogin"]);
+    Route::group(['middleware' => 'guest'], function () {
+        Route::get("login", [fm::class, "login"])->name('member.login');
         Route::get("register", [fm::class, "register"]);
-        Route::post("store", [fm::class, "store"]);
     });
+    Route::middleware('auth')->group(function () {
+        Route::get("home", [fm::class, "home"])->name("member.home");
+        Route::post("logout", [fm::class, "logout"]);
+    });
+    Route::post("doLogin", [fm::class, "doLogin"]);
+    Route::post("store", [fm::class, "store"]);
 });

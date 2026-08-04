@@ -1,20 +1,20 @@
 <!-- ===== Topbar ===== -->
 <div id="topbar" class="d-top">
   <div class="container-fluid d-flex justify-content-end align-items-center flex-wrap">
+    @auth
     <a href="/member/home">
       <i class="fa fa-user-circle"></i>
       <span>會員中心</span>
     </a>
 
-    @if (empty(session()->get("memberId")))
     <span class="sep">|</span>
 
-    <a href="/member/login">
-      <i class="fa fa-sign-in-alt"></i>
-      <span>登入</span>
+    <a href="#" id="logout_btn"
+      onclick="return confirm('確定要登出？')">
+      <i class="fa fa-sign-out-alt"></i>
+      <span>登出</span>
     </a>
-    @endif
-
+    @else
     <span class="sep">|</span>
 
     <a href="/member/register">
@@ -22,15 +22,13 @@
       <span>加入會員</span>
     </a>
 
-    @if (!empty(session()->get("memberId")))
     <span class="sep">|</span>
 
-    <a href="/member/logout"
-      onclick="return confirm('確定要登出？')">
-      <i class="fa fa-sign-out-alt"></i>
-      <span>登出</span>
+    <a href="/member/login">
+      <i class="fa fa-sign-in-alt"></i>
+      <span>登入</span>
     </a>
-    @endif
+    @endauth
   </div>
 </div>
 

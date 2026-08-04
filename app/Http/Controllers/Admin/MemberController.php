@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\Controller;
 
 class MemberController extends Controller
 {
@@ -13,7 +14,7 @@ class MemberController extends Controller
     public function list()
     {
         // 取得所有會員
-        $members = (new Member())->getMembers();
+        $members = (new Member())->getAdminMembers();
 
         // 回傳json格式
         // return response()->json($members);
@@ -61,8 +62,7 @@ class MemberController extends Controller
     public function update(Request $req)
     {
         $memberModel = new Member();
-        if ($memberModel->checkEmail($req))
-        {
+        if ($memberModel->checkEmail($req)) {
             return back()->withInput()->withErrors(["emailexist" => "信箱已存在，請用其他信箱!"]);
         }
 
@@ -71,7 +71,7 @@ class MemberController extends Controller
         $member->email = $req->email;
         $member->tel = $req->tel;
         $member->update();
-        
+
         return redirect("/admin/member/list");
     }
 
@@ -81,17 +81,17 @@ class MemberController extends Controller
         $ids = $req->id;
         $msg = "";
 
-        if(!empty($ids)){
+        if (!empty($ids)) {
             $msg = "已刪除";
-            foreach($ids as $id){
+            foreach ($ids as $id) {
                 $member = Member::find($id);
                 $member->delete();
             }
-        }else{
+        } else {
             $msg = "請選擇要刪除的資料";
         }
 
-        Session::flash("message",$msg);
+        Session::flash("message", $msg);
         return redirect("admin/member/list");
     }
     //R - Read (單篇詳情)：取得指定 ID 的文章
