@@ -49,5 +49,20 @@
         <p>修正 header，獨立出 header.css</p>
         <p>首頁初稿</p>
     </div>
+
+    <div class="col-12 log-item ms-3">
+        <h1>8/3</h1>
+        <p>完成/travelfood/{id}</p>
+        <p>寫api/travelfood</p>
+        <p>在travelfood_detail.blade中呼叫api</p>
+        <p>用jQuery的ajax</p>
+    </div>
+
+    <div class="col-12 log-item ms-3">
+        <h1>8/3</h1>
+        <p>完成/travelfood</p>
+        <p>route取opendata和id:index+1</p>
+        <p>用vuejs渲染表格、分區篩選、分頁</p>
+    </div>
 </div>
 @endsection

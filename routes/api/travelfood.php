@@ -10,7 +10,4 @@ Route::get(
 );
 
 // 取得單筆美食
-Route::get(
-    '/travelfoods/{id}',
-    [TravelFoodController::class, 'show']
-)->whereNumber('id');
+Route::get('/travelfoods/{id}', [TravelFoodController::class, 'show']);
