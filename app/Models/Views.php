@@ -98,4 +98,8 @@ class Views extends Model
 
         return $views;
     }
+
+    public function incrementCnt(){
+        $this->increment("like");
+    }
 }

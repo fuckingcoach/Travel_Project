@@ -15,14 +15,14 @@ class FrontViewsController extends Controller
         $views = new Views();
         // 取得最新消息
         $detail = Views::find($id);
-        // 在同一個session中,如果未瀏覽過此消息
-        // if (empty(session()->get("views")))
-        // {
-        //     // 瀏覽次數加1
-        //     $detail->incrementCnt();
-        //     // 註記此消息已瀏覽
-        //     session()->put("views", $id);
-        // }
+        //在同一個session中,如果未瀏覽過此消息
+        if (empty(session()->get("views")))
+        {
+            // 瀏覽次數加1
+            $detail->incrementCnt();
+            // 註記此消息已瀏覽
+            session()->put("views", $id);
+        }
 
         // 近期消息
         $recentViews = $views->recentViews($id);
