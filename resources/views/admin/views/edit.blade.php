@@ -100,7 +100,7 @@
 
             <!-- 5. 操作按鈕 -->
             <div class="d-flex justify-content-end gap-2 border-top pt-3">
-                <a href="list" class="btn btn-outline-secondary">取消</a>
+                <a href="/admin/views/list" class="btn btn-outline-secondary">取消</a>
                 <button type="button" class="btn btn-primary px-4" @click="SubmitForm">儲存修改</button>
             </div>
         </form>

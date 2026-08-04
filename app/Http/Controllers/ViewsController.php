@@ -134,4 +134,14 @@ class ViewsController extends Controller
             'message' => '景點資料刪除成功！'
         ], 200);
     }
+
+    // api查詢類別及關鍵字
+    public function getView(Request $req)
+    {
+        $list = (new Views())->getView($req);
+        return response()->json([
+            "success" => true,
+            "list" => $list
+        ]);
+    }
 }

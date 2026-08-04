@@ -9,5 +9,5 @@ class MemberWishlist extends Model
     public $timestamps = true;
     protected $table = "member_wishlists";
     protected $primaryKey = 'id';
-    protected $fillable = ["id", "memberID", "viewsId", "created_at"];
+    protected $fillable = ["id", "memberId", "viewsId", "created_at"];
 }

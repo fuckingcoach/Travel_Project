@@ -10,6 +10,9 @@ Route::get('/views', [ViewsController::class, 'index']);
 // 2. 新增文章 (POST http://localhost/api/posts)
 Route::post('/views', [ViewsController::class, 'store']);
 
+// 6. 呼叫getViews
+Route::get('/views/getView', [ViewsController::class, 'getView']);
+
 // 3. 取得單篇文章 (GET http://localhost/api/posts/1)
 Route::get('/views/{id}', [ViewsController::class, 'show']);
 

@@ -8,6 +8,7 @@ use App\Models\Views;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Upload;
+use App\Models\ViewsType;
 use Illuminate\Support\Facades\Log;
 
 class AdminViewsController extends Controller
@@ -16,7 +17,8 @@ class AdminViewsController extends Controller
     public function list()
     {
         $views = (new Views())->getAllViews()->paginate(5);
-        return view("admin.views.list", compact('views'));
+        $types = ViewsType::all();
+        return view("admin.views.list", compact('views', 'types'));
         // return response()->json($views);
     }
 

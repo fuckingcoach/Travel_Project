@@ -49,7 +49,7 @@
                     <i class="bi bi-heart-fill fs-1 text-danger"></i>
                     <h5 class="mt-3">收藏景點</h5>
                     <p class="text-muted">管理您收藏的景點與旅遊行程。</p>
-                    <button class="btn btn-outline-danger">查看收藏</button>
+                    <button class="btn btn-outline-danger" id="favorite_btn">查看收藏</button>
                 </div>
             </div>
         </div>
@@ -176,8 +176,10 @@
                         </div>
                         <div class="card-footer">
                             <div class="bg-transparent p-4 d-flex justify-content-around">
-                                <button type="submit" class="btn btn-success btn-lg w-25 rounded-5" id="saveedit_btn">儲存</button>
-                                <button type="button" class="btn btn-secondary btn-lg w-25 rounded-5 back_btn">返回</button>
+                                <button type="submit" class="btn btn-success btn rounded-5" id="saveedit_btn">
+                                    <i class="fa fa-save"></i>儲存修改</button>
+                                <button type="button" class="btn btn-secondary btn rounded-5 back_btn">
+                                    <i class="fa fa-times"></i>返回</button>
                             </div>
                         </div>
                     </form>
@@ -255,6 +257,63 @@
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="member-wishlist" class="d-none card member-page">
+        <div class="row my-5 justify-content-center">
+            <div class="col-lg-10">
+                <div class="text-center mb-4">
+                    <h2 class="display-6 fw-bold result-title">❤️ 收藏景點</h2>
+                </div>
+                <div id="favorite-list">
+                    <div class="card shadow-sm rounded-4 mb-4 favorite-card">
+                        <div class="row g-0">
+                            <!-- 左側圖片區 -->
+                            <div class="col-md-5 p-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h4 class="fw-bold mb-0">景點名稱</h4>
+                                    <span>
+                                        <button class="btn btn-outline-danger rounded-5 px-3">
+                                            <i class="bi bi-heartbreak-fill"></i>解除收藏
+                                        </button>
+                                    </span>
+                                </div>
+                                <img src="/images/hero-banner.jpg"
+                                    class="favorite-img w-50 rounded-4"
+                                    alt="景點圖片">
+                            </div>
+                            <!-- 右側資料區 -->
+                            <div class="col-md-7">
+                                <div class="card-body p-4">
+                                    <div class="mb-4">
+                                        <h5 class="fw-bold">景點簡介</h5>
+                                        <p class="text-muted">
+                                            這裡放景點簡介內容，介紹景點特色與相關資訊。
+                                        </p>
+                                    </div>
+                                    <hr>
+                                    <div class="row mb-3">
+                                        <div class="col-4 fw-bold">
+                                            <i class="bi bi-telephone-fill"></i> 電話
+                                        </div>
+                                        <div class="col-8">02-12345678</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4 fw-bold">
+                                            <i class="bi bi-geo-alt-fill"></i> 地址
+                                        </div>
+                                        <div class="col-8">台北市信義區景點地址</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 p-4">
+                            <button class="btn btn-secondary w-50 rounded-5 back_btn">返回</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -459,6 +518,11 @@
                     });
                 }
             }
+        });
+
+        $("#favorite_btn").on("click", function() {
+            $("#member-wishlist").removeClass('d-none');
+            $("#member-menu").addClass('d-none');
         });
 
 

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class Views extends Model
 {
@@ -73,9 +73,29 @@ class Views extends Model
     // 取得所有景點及類別
     public function getAllViews($type = null, $keywords = null)
     {
-        $list = DB::table("$this->table AS a")
-            ->selectRaw("a.id, a.name, a.city, a.town, a.address, a.brief, a.content, a.tel, a.like, b.typeName,(SELECT imgSrc FROM imgs WHERE viewsId = a.id LIMIT 1) AS imgSrc")
-            ->leftJoin("views_types AS b", "a.typeId", "b.id");
-        return $list;
+        // $list = DB::table("$this->table AS a")
+        //     ->selectRaw("a.id, a.name, a.city, a.town, a.address, a.brief, a.content, a.tel, a.like, b.typeName,")
+        //     ->leftJoin("views_types AS b", "a.typeId", "b.id")
+        //     ->leftJoin("imgs AS c", "a.id", "c.viewsId");
+
+        return Views::with(['types', 'imgs']);
+    }
+
+    public function getView(Request $req)
+    {
+        $sql = Views::with("types", "imgs");
+
+        if ($req->filled("typeId")) // 判斷typeId是否有值(有沒有選取類別)
+        {
+            $sql->where("typeId", $req->typeId);
+        }
+
+        if ($req->filled("keywords")) {
+            $sql->where("name", "LIKE", "%" . $req->keywords . "%");
+        }
+
+        $views = $sql->get(); // get:全部資料，也可以用all()
+
+        return $views;
     }
 }
