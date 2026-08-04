@@ -78,4 +78,8 @@ class Views extends Model
             ->leftJoin("views_types AS b", "a.typeId", "b.id");
         return $list;
     }
+
+    public function incrementCnt(){
+        $this->increment("like");
+    }
 }
