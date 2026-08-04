@@ -9,5 +9,5 @@ Route::group(["prefix" => "admin/views", "middleware" => "manager"], function ()
     Route::post("store", [AdminViewsController::class, "store"]);
     Route::get("edit/{id}", [AdminViewsController::class, "edit"]);
     Route::patch("update", [AdminViewsController::class, "update"]);
-    Route::post("delete", [AdminViewsController::class, "delete"]);
+    Route::delete("delete", [AdminViewsController::class, "delete"]);
 });

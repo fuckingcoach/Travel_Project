@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="/css/front/index.css">
 <link rel="stylesheet" href="/css/front/member/home.css">
 <link rel="stylesheet" href="/css/front/member/changePwd.css">
+<link rel="stylesheet" href="{{ asset('css/front/views.css') }}">
 @endpush
 @section("content")
 <div class="container py-4">
@@ -175,8 +176,8 @@
                         </div>
                         <div class="card-footer">
                             <div class="bg-transparent p-4 d-flex justify-content-around">
-                                <button type="submit" class="btn btn-success btn-lg w-30 rounded-5" id="saveedit_btn">儲存</button>
-                                <button type="button" class="btn btn-secondary btn-lg w-30 rounded-5 back_btn">返回</button>
+                                <button type="submit" class="btn btn-success btn-lg w-25 rounded-5" id="saveedit_btn">儲存</button>
+                                <button type="button" class="btn btn-secondary btn-lg w-25 rounded-5 back_btn">返回</button>
                             </div>
                         </div>
                     </form>
@@ -342,7 +343,7 @@
                 }
             } catch (error) {
                 console.log(error);
-                Swal.file({
+                Swal.fire({
                     title: "修改失敗",
                     text: "系統錯誤",
                     icon: "error"

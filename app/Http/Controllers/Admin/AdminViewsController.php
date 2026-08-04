@@ -158,4 +158,58 @@ class AdminViewsController extends Controller
             ], 500);
         }
     }
+
+    public function delete(Request $req)
+    {
+        // 開始交易
+        DB::beginTransaction();
+
+        try {
+
+            // 要刪除的id[], 傳過來的是陣列
+            $ids = $req->ids;
+            // sweet alert的訊息
+            $msg = "";
+            //如果有勾選要刪除的選項
+            if (!empty($ids)) {
+                $msg = "已刪除";
+                foreach ($ids as $id) {
+                    // 取得要刪除的該筆資料
+                    $view = Views::find($id);
+                    // 取得檔名
+                    $imgs = Img::where('viewsID', $id)->get();
+                    foreach ($imgs as $img) {
+                        // 將檔案由資料夾中刪除(含小圖)
+                        unlink("images/views/" . $img->imgSrc);
+                        unlink("images/views/S/" . $img->imgSrc);
+                        // 將資料由news資料表刪除
+                        $img->delete();
+                    }
+                    $view->delete();
+                }
+            } else {
+                // 未勾選任何資料
+                $msg = "未選擇要刪除的資料";
+            }
+
+            //完成交易
+            Db::commit();
+
+            return response()->json([
+                'message' => $msg
+            ]);
+        } catch (\Throwable $e) {
+            //退回交易
+            DB::rollBack();
+
+            Log::error('Delete View Failed: ' . $e->getMessage());
+
+            $msg = "刪除失敗";
+            return response()->json([
+                "message" => $msg,
+                // 正式環境建議隱藏具體錯誤細節，開發環境（config('app.debug')）才顯示
+                "error"   => config('app.debug') ? $e->getMessage() : '伺服器內部錯誤'
+            ], 500);
+        }
+    }
 }
