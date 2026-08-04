@@ -20,13 +20,13 @@ class WishlistSeeder extends Seeder
         ]);
 
         MemberWishlist::created([
-            'id' => 1,
+            'id' => 2,
             'memberId' => 1,
             'viewsId' => 2
         ]);
 
         MemberWishlist::created([
-            'id' => 1,
+            'id' => 3,
             'memberId' => 1,
             'viewsId' => 3
         ]);

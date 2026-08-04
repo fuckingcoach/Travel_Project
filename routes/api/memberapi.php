@@ -4,7 +4,7 @@ use App\Http\Controllers\Api\ApiMemberController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(["prefix" => "member"], function () {
-    Route::group(["middleware" => ["web", "auth:sanctum"]], function () {
+    Route::group(["middleware" => "web"], function () {
         Route::get("profile", [ApiMemberController::class, "getFrontMember"]);
         Route::post("update", [ApiMemberController::class, "update"]);
         Route::get("checkEmail", [ApiMemberController::class, "checkEmail"]);
