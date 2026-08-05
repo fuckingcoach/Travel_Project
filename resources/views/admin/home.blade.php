@@ -13,7 +13,7 @@
                     </div>
                     <div>
                         <h6 class="text-muted">會員數量</h6>
-                        <h3>1,280</h3>
+                        <h3>@{{ membercnt }}</h3>
                     </div>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                     </div>
                     <div>
                         <h6 class="text-muted">景點數量</h6>
-                        <h3>560</h3>
+                        <h3>@{{ viewscnt }}</h3>
                     </div>
                 </div>
             </div>
@@ -85,6 +85,8 @@
         data() {
             return {
                 title: 'Dashboard',
+                membercnt: '',
+                viewscnt: '',
                 label_like_x: [],
                 data_like_y: [],
                 label_look_x: [],
@@ -159,6 +161,8 @@
                     vm.data_look_y = response.data.data.map(function(item) {
                         return item.like;
                     });
+
+                    vm.viewscnt = response.data.data.length;
                 } catch (error) {
                     console.log(error);
                 }
