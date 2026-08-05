@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\Route;
 // 1. 取得文章列表 (GET http://localhost/api/posts)
 Route::get('/views', [ViewsController::class, 'index']);
 
+//瀏覽次數前10多的文章列表
+Route::get('/views10', [ViewsController::class, 'like10']);
+
+//瀏覽次數和類別的文章列表
+Route::get('/views&types', [ViewsController::class, 'viewsandtype']);
+
 // 2. 新增文章 (POST http://localhost/api/posts)
 Route::post('/views', [ViewsController::class, 'store']);
 
