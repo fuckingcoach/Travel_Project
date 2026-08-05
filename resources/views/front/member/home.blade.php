@@ -11,7 +11,7 @@
 
 @section("content")
 <div id="app" class="container py-4" v-cloak>
-    
+
     <!-- 頂部會員基本資訊區塊 -->
     <div class="row mb-4" id="member-info">
         <div class="col-lg-3 mb-4 mb-lg-0">
@@ -165,11 +165,11 @@
                                 <hr>
                                 <div class="col-8 mb-3">
                                     <label class="col-4 fw-bold form-label">電話</label>
-                                    <input type="text" class="form-control" 
-                                           :class="{'is-valid': isTelValid === true, 'is-invalid': isTelValid === false}" 
-                                           v-model="editForm.tel" 
-                                           @input="validateTel" 
-                                           placeholder="請輸入電話號碼">
+                                    <input type="text" class="form-control"
+                                        :class="{'is-valid': isTelValid === true, 'is-invalid': isTelValid === false}"
+                                        v-model="editForm.tel"
+                                        @input="validateTel"
+                                        placeholder="請輸入電話號碼">
                                     <div class="valid-feedback">電話格式符合</div>
                                     <div class="invalid-feedback">請輸入正確的電話格式</div>
                                 </div>
@@ -262,7 +262,7 @@
                                 <button type="submit" class="btn btn-warning btn-lg w-30 rounded-5">
                                     <i class="fa fa-save"></i> 確認修改
                                 </button>
-                                <button type="button" class="btn btn-secondary btn-lg w-30 rounded-5" @click="backToMenu">
+                                <button type="button" class="btn btn-secondary btn-lg w-30 rounded-5" @click="backToMenu()">
                                     <i class="fa fa-times"></i> 返回
                                 </button>
                             </div>
@@ -278,57 +278,86 @@
         <div class="row my-5 justify-content-center">
             <div class="col-lg-10">
                 <div class="text-center mb-4">
-                    <h2 class="display-6 fw-bold result-title">❤️ 收藏景點</h2>
+                    <h2 class="display-6 fw-bold result-title">🏞️ 收藏景點</h2>
                 </div>
                 <div id="favorite-list">
+                    <!-- 沒有收藏景點時的頁面 -->
+                    <div v-if="favorites.length === 0" class="card shadow-sm rounded-4 mb-3 mx-3 favorite-card">
+                        <div class="row g-0">
+                            <div class="col-12">
+                                <div class="card-body p-5 text-center">
+                                    <div class="mb-4">
+                                        <i class="bi bi-heart text-secondary" style="font-size: 5rem;"></i>
+                                    </div>
+
+                                    <h3 class="fw-bold mb-3">
+                                        尚未收藏任何景點
+                                    </h3>
+
+                                    <p class="text-muted mb-4 fs-5">
+                                        快到 <span class="fw-bold text-primary">景點探索</span> 找尋更多值得收藏的景點吧！
+                                    </p>
+
+                                    <button
+                                        class="btn btn-primary rounded-pill px-5"
+                                        @click="goViews">
+                                        <i class="bi bi-compass me-2"></i>
+                                        前往景點探索
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- 示範寫法：可以用 v-for 循環渲染真正的收藏列表 -->
                     <div v-for="(item, index) in favorites" :key="index" class="card shadow-sm rounded-4 mb-3 mx-3 favorite-card">
                         <div class="row g-0">
                             <!-- 左側圖片區 -->
                             <div class="col-md-5 p-4">
                                 <div class="d-flex justify-content-start align-items-center gap-2 mb-3">
-                                    <h4 class="fw-bold mb-0">@{{ item.name }}</h4>
-                                    <button type="button" class="btn heart_btn p-0" @click="item.isLiked = !item.isLiked">
-                                        <i class="fa-solid fa-heart" :style="{ color: item.isLiked ? 'rgb(233, 122, 122)' : '#ccc' }"></i>
+                                    <h4 class="fw-bold mb-0">@{{ item.views.name }}</h4>
+                                    <button type="button" class="btn heart_btn p-0" @click="toggleHeart(item)">
+                                        <i class="fa-solid fa-heart" :style="{ color:item.isLiked ? 'rgb(233, 122, 122)' : '#ccc' }"></i>
                                     </button>
                                 </div>
-                                <div class="text-center">
-                                    <img :src="item.image" class="favorite-img w-75 rounded-4" :alt="item.name">
-                                </div>
+                                <a :href="'/views/' + item.views.id" class="text-center">
+                                    <img :src="'/images/views/' + item.views.imgs[0].imgSrc" class="favorite-img w-75 rounded-4" :alt="item.name">
+                                </a>
                             </div>
                             <!-- 右側資料區 -->
                             <div class="col-md-7 text-center">
                                 <div class="card-body p-4">
                                     <div class="mb-4">
                                         <h5 class="fw-bold d-flex justify-content-start">景點簡介</h5>
-                                        <p class="text-muted mt-3">@{{ item.description }}</p>
+                                        <p class="text-muted mt-3">@{{ item.views.brief }}</p>
                                     </div>
                                     <hr>
                                     <div class="row mb-3">
                                         <div class="col-4 fw-bold">
                                             <i class="bi bi-telephone-fill"></i> 電話
                                         </div>
-                                        <div class="col-8">@{{ item.tel }}</div>
+                                        <div class="col-8">@{{ item.views.tel }}</div>
                                     </div>
                                     <div class="row">
                                         <div class="col-4 fw-bold">
                                             <i class="bi bi-geo-alt-fill"></i> 地址
                                         </div>
-                                        <div class="col-8">@{{ item.address }}</div>
+                                        <div class="col-8">@{{ item.views.city + item.views.town + item.views.address }}</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-transparent border-0 p-4 d-flex justify-content-center">
-                            <button class="btn btn-secondary w-50 rounded-5 d-flex justify-content-center align-items-center" @click="backToMenu">
-                                返回
-                            </button>
-                        </div>
+                    </div>
+                    <div class="bg-transparent border-0 p-4 d-flex justify-content-center">
+                        <button class="btn btn-secondary w-50 rounded-5 d-flex justify-content-center align-items-center" @click="backToMenu(),loadWishlist()">
+                            返回
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+
 
 </div>
 
@@ -339,14 +368,16 @@
     axios.defaults.withCredentials = true;
     axios.defaults.withXSRFToken = true;
 
-    const { createApp } = Vue;
+    const {
+        createApp
+    } = Vue;
 
     createApp({
         data() {
             return {
                 // 頁面控制狀態: 'menu' | 'profile' | 'edit' | 'pwd' | 'wishlist'
                 currentPage: 'menu',
-                
+
                 // 會員基本資料
                 member: {
                     id: '',
@@ -397,21 +428,13 @@
                     isValid: false
                 },
 
-                // 假資料示範收藏景點 (未來可對接 API)
-                favorites: [
-                    {
-                        name: '景點名稱',
-                        image: '/images/hero-banner.jpg',
-                        description: '這裡放景點簡介內容，介紹景點特色與相關資訊。',
-                        tel: '02-12345678',
-                        address: '台北市信義區景點地址',
-                        isLiked: true
-                    }
-                ]
+                // 收藏景點 
+                favorites: [],
             };
         },
         mounted() {
             this.loadMember();
+            this.loadWishlist();
         },
         methods: {
             // 載入會員資料
@@ -481,7 +504,9 @@
                 this.isCheckingEmail = true;
                 try {
                     const response = await axios.get('/api/member/checkEmail', {
-                        params: { email: this.editForm.email }
+                        params: {
+                            email: this.editForm.email
+                        }
                     });
                     if (response.data.exist) {
                         this.emailMsg = "信箱已使用，請重新輸入!";
@@ -566,7 +591,10 @@
 
             // 檢查第二次密碼是否一致
             checkPwdMatch() {
-                const { newpwd, newpwd_confirmation } = this.pwdForm;
+                const {
+                    newpwd,
+                    newpwd_confirmation
+                } = this.pwdForm;
                 if (newpwd_confirmation && newpwd_confirmation !== newpwd) {
                     this.pwdMatch = {
                         hint: '⚠ 兩次密碼不一致',
@@ -580,7 +608,11 @@
                         isValid: true
                     };
                 } else {
-                    this.pwdMatch = { hint: '', color: '#dc2626', isValid: false };
+                    this.pwdMatch = {
+                        hint: '',
+                        color: '#dc2626',
+                        isValid: false
+                    };
                 }
             },
 
@@ -607,7 +639,11 @@
                             confirmButtonText: "確定"
                         });
                         // 清空表單
-                        this.pwdForm = { oldpwd: '', newpwd: '', newpwd_confirmation: '' };
+                        this.pwdForm = {
+                            oldpwd: '',
+                            newpwd: '',
+                            newpwd_confirmation: ''
+                        };
                     }
                 } catch (error) {
                     if (error.response) {
@@ -623,15 +659,66 @@
                         });
                     }
                 }
+            },
+            async loadWishlist() {
+                try {
+                    const vm = this;
+                    let response = await axios.get('/api/wishlist/list');
+                    if (response.data.status) {
+                        console.log(response);
+                        vm.favorites = response.data.data ? response.data.data : [];
+                        vm.favorites = response.data.data.map(item => ({
+                            ...item,
+                            isLiked: true
+                        }));
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            },
+            goViews() {
+                window.location.href = "/views";
+            },
+            async toggleHeart(item) {
+
+                if (item.isLiked) {
+                    // 呼叫刪除收藏 API
+                    console.log("取消收藏", item.views.id);
+                    try {
+                        let response = await axios.delete('/api/wishlist/delete', {
+                            data: {
+                                viewsId: item.views.id
+                            }
+                        });
+                        console.log(response);
+                        item.isLiked = false;
+                    } catch (error) {
+                        console.log(error.response);
+                    }
+
+                } else {
+                    // 呼叫加入收藏 API
+                    console.log("加入收藏", item.views.id);
+                    try {
+                        let response = await axios.post('/api/wishlist/add', {
+                            viewsId: item.views.id
+                        });
+                        console.log(response);
+                        item.isLiked = true;
+
+                    } catch (error) {
+                        console.log(error.response);
+                    }
+                }
             }
         }
     }).mount('#app');
 </script>
 
 <style>
-/* 避免 Vue 載入前的插值語法閃爍 (需搭配 v-cloak) */
-[v-cloak] {
-    display: none;
-}
+    /* 避免 Vue 載入前的插值語法閃爍 (需搭配 v-cloak) */
+    [v-cloak] {
+        display: none;
+    }
 </style>
 @endsection

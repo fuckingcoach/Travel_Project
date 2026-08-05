@@ -10,5 +10,6 @@ Route::group(["prefix" => "member"], function () {
         Route::get("checkEmail", [ApiMemberController::class, "checkEmail"]);
         // Route::get("checkPwd", [ApiMemberController::class, "checkPwd"]);
         Route::post("updatePwd", [ApiMemberController::class, "updatePwd"]);
+        Route::get("getAlldata", [ApiMemberController::class, "getAlldata"]);
     });
 });

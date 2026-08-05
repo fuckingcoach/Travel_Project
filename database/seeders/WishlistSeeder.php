@@ -13,22 +13,6 @@ class WishlistSeeder extends Seeder
      */
     public function run(): void
     {
-        MemberWishlist::created([
-            'id' => 1,
-            'memberId' => 1,
-            'viewsId' => 1
-        ]);
-
-        MemberWishlist::created([
-            'id' => 2,
-            'memberId' => 1,
-            'viewsId' => 2
-        ]);
-
-        MemberWishlist::created([
-            'id' => 3,
-            'memberId' => 1,
-            'viewsId' => 3
-        ]);
+        MemberWishlist::factory()->count(50)->create();
     }
 }

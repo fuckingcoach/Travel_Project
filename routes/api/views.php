@@ -13,6 +13,9 @@ Route::post('/views', [ViewsController::class, 'store']);
 // 6. 呼叫getViews
 Route::get('/views/getView', [ViewsController::class, 'getView']);
 
+// 讀取景點以及收藏
+Route::get("/views/getWishView", [ViewsController::class, "getWishView"]);
+
 // 3. 取得單篇文章 (GET http://localhost/api/posts/1)
 Route::get('/views/{id}', [ViewsController::class, 'show']);
 

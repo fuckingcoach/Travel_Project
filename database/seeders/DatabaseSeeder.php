@@ -440,7 +440,8 @@ class DatabaseSeeder extends Seeder
         ]);
         $this->call([
             ManagerSeeder::class,
-            MemberSeeder::class
+            MemberSeeder::class,
+            WishlistSeeder::class
         ]);
     }
 }
