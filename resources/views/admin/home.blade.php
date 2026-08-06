@@ -1,190 +1,7 @@
 @extends('admin.layout')
 @section('title','後臺管理系統')
 @section('content')
-<style>
-    .stats-card {
-        border: none;
-        border-radius: 14px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
-        transition: .25s;
-
-        display: flex;
-        flex-direction: column;
-        height: 420px;
-    }
-
-    .stats-card .card-body {
-        flex: 1;
-        display: flex;
-        min-height: 0;
-        padding: 0;
-    }
-
-    .stats-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 22px rgba(0, 0, 0, .12);
-    }
-
-    .stats-card .card-header {
-        padding: 18px 20px;
-        background: #f8f9fa;
-        border-bottom: 1px solid #ececec;
-    }
-
-    .card-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
-        color: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 22px;
-    }
-
-    .ranking-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-
-        display: flex;
-        flex-direction: column;
-
-        flex: 1;
-    }
-
-    .ranking-list li {
-        display: flex;
-        align-items: center;
-        padding: 14px 18px;
-        border-bottom: 1px solid #f2f2f2;
-        transition: .2s;
-    }
-
-    .ranking-list li:last-child {
-        border-bottom: none;
-    }
-
-    .ranking-list li:hover {
-        background: #f8f9fa;
-    }
-
-    .rank-number {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        background: #0d6efd;
-        color: #fff;
-        font-size: 13px;
-        font-weight: 700;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-right: 14px;
-        flex-shrink: 0;
-    }
-
-    .rank-number.gold {
-        background: #f1b500;
-    }
-
-    .rank-number.silver {
-        background: #9ea5b1;
-    }
-
-    .rank-number.bronze {
-        background: #c97b3d;
-    }
-
-    .rank-title {
-        flex: 1;
-        font-size: 15px;
-        font-weight: 500;
-        color: #444;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .ranking-list i {
-        font-size: 14px;
-        color: #999;
-    }
-
-    .ranking-list::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    .ranking-list::-webkit-scrollbar-thumb {
-        background: #cfcfcf;
-        border-radius: 10px;
-    }
-
-    .ranking-list::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .dashboard-row {
-        display: flex;
-        align-items: stretch;
-    }
-
-
-    .dashboard-row>div {
-        display: flex;
-    }
-
-
-    .dashboard-card {
-        width: 100%;
-        border: none;
-        border-radius: 14px;
-        overflow: hidden;
-    }
-
-
-    .chart-card {
-        height: 100%;
-    }
-
-
-    .stats-card {
-        height: 100%;
-    }
-
-
-    .stats-card .card-body {
-        min-height: 0;
-    }
-
-
-    .ranking-list {
-        flex: 1;
-    }
-
-
-    .ranking-list li {
-        flex: 1;
-    }
-
-    .chart-card {
-        height: 700px;
-    }
-
-
-    .chart-card .card-body {
-        height: 100%;
-        padding: 20px;
-    }
-
-
-    .chart-card canvas {
-        width: 100% !important;
-        height: 100% !important;
-    }
-</style>
+<link rel="stylesheet" href="/css/admin/home.css">
 <div id="app">
     <h3 class="mb-4">@{{ title }}</h3>
     <div class="row g-4">
@@ -256,6 +73,7 @@
                 <div class="card-body p-0">
                     <ul class="ranking-list">
                         <li v-for="(item,index) in top10likeviews" :key="item.id">
+
                             <div class="rank-number"
                                 :class="{
                             'gold': index==0,
@@ -269,7 +87,11 @@
                                 @{{ item.name }}
                             </div>
 
-                            <i class="bi bi-chevron-right text-secondary"></i>
+                            <div class="rank-like">
+                                <i class="bi bi-heart-fill" style="color: rgba(247, 19, 152, 0.86);"></i>
+                                @{{ item.likes }}
+                            </div>
+
                         </li>
                     </ul>
                 </div>
@@ -289,7 +111,7 @@
                 <div class="card-header">
                     <div class="d-flex align-items-center">
                         <div class="card-icon bg-primary">
-                            <i class="bi bi-eye-fill"></i>
+                            <i class="bi bi-eyeglasses"></i>
                         </div>
 
                         <div class="ms-3">
@@ -315,7 +137,11 @@
                                 @{{ item.name }}
                             </div>
 
-                            <i class="bi bi-chevron-right text-secondary"></i>
+                            <div class="rank-like">
+                                <i class="bi bi-eye-fill" style="color: rgb(15, 15, 15);"></i>
+                                @{{ item.looks }}
+                            </div>
+
                         </li>
                     </ul>
                 </div>

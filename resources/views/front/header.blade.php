@@ -74,7 +74,7 @@
         </a>
 
         <a
-          href="/events"
+          href="#"
           class="nav-link {{ Request::is('events*') ? 'active' : '' }}">
           旅遊靈感
         </a>
