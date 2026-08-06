@@ -19,6 +19,35 @@ class ViewsController extends Controller
         ], 200);
     }
 
+    public function like10()
+    {
+        // 依 like 欄位由高到低排序，取得前 10 筆景點資料
+        $views = Views::orderByDesc('like')
+            ->limit(10)
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data'   => $views
+        ], 200);
+    }
+
+    public function viewsandtype()
+    {
+        $views = Views::join('views_types', 'views.typeId', '=', 'views_types.id')
+            ->select(
+                'views.id',
+                'views.name',
+                'views_types.typeName as typeName'
+            )
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $views,
+        ], 200);
+    }
+
     // C - Create (新增)：處理資料寫入
     public function store(Request $req)
     {

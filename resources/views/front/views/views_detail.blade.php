@@ -8,6 +8,8 @@
 <link rel="stylesheet" href="{{ asset('css/front/views_detail.css') }}?v={{ time() }}">
 <!-- 引入 Fancybox 5 CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 @endpush
 
 @section("content")
@@ -77,8 +79,13 @@
 
           <!-- 文章內容區 -->
           <div class="article-body">
-            <h2 class="article-title fw-bold my-3" style="color: var(--brand);">{{ $detail->name }}</h2>
+            <div class="d-flex align-items-center">
+              <h2 class="article-title fw-bold my-3" style="color: var(--brand);">
+                {{ $detail->name }}
+              </h2>
 
+
+            </div>
             <!-- 地址與電話 (已修正為 Blade 語法) -->
             <div class="d-flex align-items-center flex-wrap gap-3 text-muted small mb-3">
               @if($detail->city || $detail->town || $detail->address)
@@ -94,6 +101,28 @@
                 {{ $detail->tel }}
               </div>
               @endif
+
+              <div class="d-flex align-items-center ms-auto" id="app">
+                <!-- 愛心按鈕 -->
+                <div class="stats-item m-1">
+                  <button type="button" class="btn favorite-btn p-0" v-on:click="toggleFavorite">
+                    <i
+                      v-bind:class="isLiked ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"
+                      style="color: rgb(233, 122, 122);"></i>
+                  </button>
+                </div>
+
+                <!-- 點讚數字 (同步 Vue 資料) -->
+                <div class="stats-item m-1">
+                  <span>@{{ likeCount }} 次收藏</span>
+                </div>
+
+                <!-- 瀏覽次數 -->
+                <div class="stats-item m-1">
+                  <i class="fa-solid fa-eye" style="color: rgb(116, 192, 252);"></i>
+                  <span>{{ $detail->like }}次瀏覽</span>
+                </div>
+              </div>
             </div>
 
             <!-- 景點介紹文案 -->
@@ -189,14 +218,25 @@
 @push("script")
 <!-- 引入 Fancybox 5 JS -->
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+@push("script")
+<!-- Fancybox 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+
+<!-- Vue 3 -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
+    // Fancybox
     Fancybox.bind("[data-fancybox='gallery']", {
       Navigation: true,
+
       Thumbs: {
         type: "classic",
         autoStart: true,
       },
+
       Toolbar: {
         display: {
           left: ["infobar"],
@@ -212,9 +252,36 @@
           right: ["slideshow", "thumbs", "close"],
         },
       },
+
       infinite: true,
       backdropClick: "close",
     });
+
+    // Vue 3
+    const App = {
+      data() {
+        return {
+          isLiked: false,
+          // 將 Laravel 的點讚數轉成整數
+          likeCount: 0,
+        };
+      },
+
+      methods: {
+        toggleFavorite() {
+          this.isLiked = !this.isLiked;
+
+          if (this.isLiked) {
+            this.likeCount++;
+          } else {
+            // 避免點讚數小於 0
+            this.likeCount = Math.max(0, this.likeCount - 1);
+          }
+        },
+      },
+    };
+
+    Vue.createApp(App).mount("#app");
   });
 </script>
 @endpush
