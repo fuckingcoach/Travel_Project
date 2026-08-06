@@ -6,3 +6,4 @@ use Illuminate\Support\Facades\Route;
 Route::get("/admin/home", [AdminController::class, "home"])->middleware("manager");
 Route::get("/admin", [AdminController::class, "login"]);
 Route::post("/admin/login", [AdminController::class, "doLogin"]);
+Route::delete("/admin/delete", [AdminController::class, "delete"]);

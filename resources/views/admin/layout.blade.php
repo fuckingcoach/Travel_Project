@@ -91,8 +91,9 @@
         </div>
 
         <form method="POST" action="/logout">
+            <input type="hidden" name="id">
             @csrf
-            <button class="btn btn-light btn-sm">
+            <button type="button" class="btn btn-light btn-sm">
                 <i class="bi bi-box-arrow-right"></i>
                 登出
             </button>
