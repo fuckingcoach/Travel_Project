@@ -11,5 +11,6 @@ Route::group(["prefix" => "admin"], function () {
         Route::get("edit/{id}", [MemberController::class, "edit"]);
         Route::post("update", [MemberController::class, "update"]);
         Route::post("delete", [MemberController::class, "delete"]);
+        Route::get("getMembers", [MemberController::class, "getMembers"]);
     });
 });

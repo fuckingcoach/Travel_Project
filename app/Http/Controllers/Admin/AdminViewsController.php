@@ -16,7 +16,7 @@ class AdminViewsController extends Controller
     private $dir = "images/views";
     public function list()
     {
-        $views = (new Views())->getAllViews()->paginate(5);
+        $views = Views::with(['types', 'imgs'])->paginate(5);
         $types = ViewsType::all();
         return view("admin.views.list", compact('views', 'types'));
         // return response()->json($views);

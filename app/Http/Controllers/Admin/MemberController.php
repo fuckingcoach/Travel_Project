@@ -102,4 +102,13 @@ class MemberController extends Controller
 
         return response()->json($post);
     }
+
+    public function getMembers()
+    {
+        $cnt = Member::all()->count();
+        return response()->json([
+            'status' => true,
+            'cnt' => $cnt
+        ]);
+    }
 }

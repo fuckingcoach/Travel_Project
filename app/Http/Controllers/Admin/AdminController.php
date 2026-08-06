@@ -26,19 +26,20 @@ class AdminController extends Controller
         $code = $req->code;
 
         // 驗證碼確認
-        if (captcha_check($code) == false){
+        if (captcha_check($code) == false) {
             return back()->withInput()->withErrors(["code" => "認證碼錯誤"]);
             exit;
         }
 
         // 檢查帳號密碼
-        $manager = (new Manager())->getManager($userName,$pwd);
-        if (empty($manager)){
+        $manager = (new Manager())->getManager($userName, $pwd);
+        if (empty($manager)) {
             return back()->withInput()->withErrors(["none" => "帳號或密碼錯誤"]);
-        }
-        else{
-            session()->put("userName",$userName);
+        } else {
+            session()->put("userName", $userName);
             return redirect("/admin/home");
         }
     }
+
+    public function delete() {}
 }

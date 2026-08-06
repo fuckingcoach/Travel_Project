@@ -76,17 +76,6 @@ class Views extends Model
         return $list;
     }
 
-    // 取得所有景點及類別
-    public function getAllViews($type = null, $keywords = null)
-    {
-        // $list = DB::table("$this->table AS a")
-        //     ->selectRaw("a.id, a.name, a.city, a.town, a.address, a.brief, a.content, a.tel, a.like, b.typeName,")
-        //     ->leftJoin("views_types AS b", "a.typeId", "b.id")
-        //     ->leftJoin("imgs AS c", "a.id", "c.viewsId");
-
-        return Views::with(['types', 'imgs']);
-    }
-
     public function getView(Request $req)
     {
         $sql = Views::with("types", "imgs");
