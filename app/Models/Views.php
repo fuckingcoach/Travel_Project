@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 
 class Views extends Model
@@ -28,6 +29,11 @@ class Views extends Model
             或DB::table("news AS a")->selectRaw("a.*, b.*)->join("news_type AS b")->get();
         */
         return $this->belongsTo(ViewsType::class, "typeId");
+    }
+
+    public function wishlists(): HasMany
+    {
+        return $this->hasMany(MemberWishlist::class, "viewsId", "id");
     }
 
     // 用id取上一則
@@ -99,7 +105,8 @@ class Views extends Model
         return $views;
     }
 
-    public function incrementCnt(){
+    public function incrementCnt()
+    {
         $this->increment("like");
     }
 }

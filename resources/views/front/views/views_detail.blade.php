@@ -227,7 +227,7 @@
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", function() {
     // Fancybox
     Fancybox.bind("[data-fancybox='gallery']", {
       Navigation: true,
@@ -264,21 +264,112 @@
           isLiked: false,
           // 將 Laravel 的點讚數轉成整數
           likeCount: 0,
+          viewsId: ''
         };
       },
 
       methods: {
-        toggleFavorite() {
-          this.isLiked = !this.isLiked;
 
-          if (this.isLiked) {
-            this.likeCount++;
-          } else {
-            // 避免點讚數小於 0
-            this.likeCount = Math.max(0, this.likeCount - 1);
+        showLogin(error) {
+          if (error.response.status == 401) {
+            Swal.fire({
+              title: "尚未登入?",
+              text: "請登入或註冊後使用收藏功能",
+              icon: "question"
+            });
           }
         },
+        async toggleFavorite() {
+          const vm = this;
+          let url = new URL(window.location.href);
+          let id = url.pathname.split('/').pop();
+          if (vm.isLiked) {
+            // 呼叫刪除收藏 API
+            console.log("取消收藏", id);
+            try {
+              let response = await axios.delete('/api/wishlist/delete', {
+                data: {
+                  viewsId: id
+                }
+              });
+              console.log(response);
+              vm.isLiked = false;
+            } catch (error) {
+              console.log(error.response);
+              vm.showLogin(error);
+            }
+
+          } else {
+            // 呼叫加入收藏 API
+            console.log("加入收藏", id);
+            try {
+              let response = await axios.post('/api/wishlist/add', {
+                viewsId: id
+              });
+              console.log(response);
+              vm.isLiked = true;
+
+            } catch (error) {
+              console.log(error.response);
+              vm.showLogin(error);
+            }
+          }
+        },
+        checkLiked() {
+          const vm = this;
+          let url = new URL(window.location.href);
+          let id = url.pathname.split('/').pop();
+          console.log(id);
+          axios.get('/api/wishlist/checkLiked', {
+              params: {
+                viewsId: id
+              }
+            })
+            .then(function(response) {
+              console.log(response);
+              if (response.data.status) {
+                vm.isLiked = true;
+              } else {
+                vm.isLiked = false;
+              }
+            })
+            .catch(function(error) {
+              console.log(error);
+              vm.isLiked = false;
+            })
+            .finally(function() {
+              // always executed
+            });
+        },
+        getLikeCount() {
+          const vm = this;
+          let url = new URL(window.location.href);
+          let id = url.pathname.split('/').pop();
+          axios.get('/api/wishlist/getLikes', {
+              params: {
+                viewsId: id
+              }
+            })
+            .then(function(response) {
+              console.log(response);
+              if (response.data.status) {
+                vm.likeCount = response.data.likes;
+              }
+            })
+            .catch(function(error) {
+              console.log(error);
+            })
+            .finally(function() {
+              // always executed
+            });
+
+        }
       },
+      mounted() {
+        const vm = this;
+        vm.checkLiked();
+        vm.getLikeCount();
+      }
     };
 
     Vue.createApp(App).mount("#app");

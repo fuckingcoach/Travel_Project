@@ -173,4 +173,13 @@ class ViewsController extends Controller
             "list" => $list
         ]);
     }
+
+    public function getWishView()
+    {
+        $list = Views::with('wishlists')->get();
+        return response()->json([
+            'status' => true,
+            'data' => $list
+        ]);
+    }
 }
