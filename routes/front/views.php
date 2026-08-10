@@ -16,7 +16,7 @@ Route::get('/views-0', function () {
     $viewstype = ViewsType::latest()->get();
     $img = Img::latest()->get();
 
-    return view('front.views.views-0', compact('views','viewstype','img'));
+    return view('front.views.views-0', compact('views', 'viewstype', 'img'));
 });
 
 Route::get('/views-1', function () {

@@ -320,7 +320,7 @@
                                     </button>
                                 </div>
                                 <a :href="'/views/' + item.views.id" class="text-center">
-                                    <img :src="'/images/views/' + item.views.imgs[0].imgSrc" class="favorite-img w-75 h-75 rounded-4" :alt="item.name">
+                                    <img :src=" item.views.imgs && item.views.imgs.length > 0 ? '/images/views/' + item.views.imgs[0].imgSrc : '/images/views/default.jpg'" class="favorite-img w-75 h-75 rounded-4" :alt="item.name">
                                 </a>
                             </div>
                             <!-- 右側資料區 -->
