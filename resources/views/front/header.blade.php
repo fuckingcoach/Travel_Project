@@ -38,7 +38,7 @@
 
     <!-- Logo -->
     <a href="/" class="lb">
-      Logo
+      <img src="{{ asset('images/logo.png') }}" alt="網站首頁 Logo">
     </a>
 
     <!-- 品牌名稱 -->

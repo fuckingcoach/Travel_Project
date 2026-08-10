@@ -1,0 +1,1099 @@
+/* =========================================================
+   Taiwan Journey
+   全站 Layout / Theme
+
+   設計概念：
+   海洋藍 Ocean Blue
+   山林綠 Forest Green
+   日出橘 Sunrise Orange
+   燈籠紅 Lantern Red
+========================================================= */
+
+:root {
+    /* =========================
+       品牌主色
+    ========================= */
+
+    /* 台灣海洋深藍 */
+    --brand: #0B5F87;
+
+    /* 深海藍 */
+    --brand-dark: #073B59;
+
+    /* 連結藍 */
+    --brand-link: #147DA5;
+
+    /* 天空 / 海浪亮藍 */
+    --ocean: #168FC4;
+
+    /* 淺海洋藍 */
+    --ocean-light: #E8F6FB;
+
+
+    /* =========================
+       山林色
+    ========================= */
+
+    /* 森林綠 */
+    --green: #2F855A;
+
+    /* 台灣山林亮綠 */
+    --green-light: #79B844;
+
+    /* 深森林 */
+    --green-dark: #1F6849;
+
+    /* 淺綠背景 */
+    --green-soft: #EDF7EF;
+
+
+    /* =========================
+       日出色
+    ========================= */
+
+    --sun: #F5A623;
+
+    --sun-hover: #E38B13;
+
+    --sun-light: #FFF4D8;
+
+
+    /* =========================
+       台灣文化點綴
+    ========================= */
+
+    --lantern: #D84A32;
+
+    --lantern-dark: #B93626;
+
+
+    /* =========================
+       基本色
+    ========================= */
+
+    --bg: #F5F9F8;
+
+    --bg-soft: #EEF6F5;
+
+    --white: #FFFFFF;
+
+    --text: #20323C;
+
+    --text-muted: #6D7E86;
+
+    --border: #DDE8E6;
+
+
+    /* =========================
+       UI
+    ========================= */
+
+    --radius-sm: 6px;
+
+    --radius: 10px;
+
+    --radius-lg: 18px;
+
+    --shadow:
+        0 4px 16px rgba(7, 59, 89, 0.08);
+
+    --shadow-lg:
+        0 14px 40px rgba(7, 59, 89, 0.14);
+
+    --nav-h: 68px;
+
+    --topbar-h: 36px;
+}
+
+
+/* =========================================================
+   Reset
+========================================================= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+    margin: 0;
+
+    font-family:
+        "Noto Sans TC",
+        "Microsoft JhengHei",
+        sans-serif;
+
+    color: var(--text);
+
+    background:
+        linear-gradient(180deg,
+            #ffffff 0,
+            var(--bg) 260px);
+
+    font-size: 15px;
+
+    line-height: 1.7;
+
+    overflow-x: hidden;
+}
+
+
+a {
+    color: inherit;
+
+    text-decoration: none;
+}
+
+
+img {
+    display: block;
+
+    max-width: 100%;
+}
+
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+
+/* =========================================================
+   Selection
+========================================================= */
+
+::selection {
+    color: #fff;
+
+    background: var(--brand);
+}
+
+
+/* =========================================================
+   Container
+========================================================= */
+
+.container {
+    width: 100%;
+
+    max-width: 1200px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+
+/* =========================================================
+   一般頁面區塊
+========================================================= */
+
+.section {
+    padding: 56px 0;
+}
+
+
+.section-title {
+    position: relative;
+
+    margin-bottom: 30px;
+
+    color: var(--brand-dark);
+
+    font-size: 28px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+
+.section-title::after {
+    content: "";
+
+    display: block;
+
+    width: 55px;
+
+    height: 4px;
+
+    margin-top: 10px;
+
+    background:
+        linear-gradient(90deg,
+            var(--green),
+            var(--ocean),
+            var(--sun));
+
+    border-radius: 999px;
+}
+
+
+/* =========================================================
+   Page Hero
+========================================================= */
+
+.page-hero {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 52px 32px 46px;
+
+    color: #fff;
+
+    background:
+        radial-gradient(circle at 85% 25%,
+            rgba(245, 166, 35, 0.22),
+            transparent 25%),
+        radial-gradient(circle at 5% 110%,
+            rgba(121, 184, 68, 0.35),
+            transparent 35%),
+        linear-gradient(135deg,
+            var(--brand-dark) 0%,
+            var(--brand) 48%,
+            var(--green-dark) 100%);
+}
+
+
+/* 山丘裝飾 */
+.page-hero::after {
+    content: "";
+
+    position: absolute;
+
+    right: -90px;
+
+    bottom: -95px;
+
+    width: 360px;
+
+    height: 190px;
+
+    border-radius: 50% 50% 0 0;
+
+    background:
+        linear-gradient(135deg,
+            rgba(121, 184, 68, 0.28),
+            rgba(47, 133, 90, 0.12));
+
+    transform: rotate(-8deg);
+
+    pointer-events: none;
+}
+
+
+.page-hero h1 {
+    position: relative;
+
+    z-index: 1;
+
+    margin: 0;
+
+    font-size: clamp(26px, 3vw, 36px);
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    text-shadow:
+        0 3px 12px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================================
+   Breadcrumb
+========================================================= */
+
+.page-hero .bc {
+    position: relative;
+
+    z-index: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 10px;
+
+    color: rgba(255, 255, 255, 0.68);
+
+    font-size: 13px;
+}
+
+
+.page-hero .bc a {
+    color: rgba(255, 255, 255, 0.88);
+
+    transition:
+        color 0.2s ease;
+}
+
+
+.page-hero .bc a:hover {
+    color: #FFD47E;
+}
+
+
+/* =========================================================
+   Card
+========================================================= */
+
+.travel-card {
+    overflow: hidden;
+
+    background: #fff;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius-lg);
+
+    box-shadow:
+        var(--shadow);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+
+.travel-card:hover {
+    border-color:
+        rgba(22, 143, 196, 0.3);
+
+    transform:
+        translateY(-5px);
+
+    box-shadow:
+        var(--shadow-lg);
+}
+
+
+/* =========================================================
+   Category Tabs
+========================================================= */
+
+.cat-tabs {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-bottom: 36px;
+}
+
+
+.cat-tab {
+    padding:
+        8px 22px;
+
+    color:
+        var(--text-muted);
+
+    background:
+        #fff;
+
+    border:
+        1.5px solid var(--border);
+
+    border-radius:
+        999px;
+
+    font-size:
+        14px;
+
+    font-weight:
+        600;
+
+    cursor:
+        pointer;
+
+    transition:
+        all 0.22s ease;
+}
+
+
+.cat-tab:hover {
+    color:
+        var(--brand);
+
+    border-color:
+        var(--ocean);
+
+    background:
+        var(--ocean-light);
+
+    transform:
+        translateY(-1px);
+}
+
+
+.cat-tab.active {
+    color:
+        #fff;
+
+    border-color:
+        transparent;
+
+    background:
+        linear-gradient(135deg,
+            var(--brand),
+            var(--green));
+
+    box-shadow:
+        0 5px 13px rgba(11, 95, 135, 0.18);
+}
+
+
+/* =========================================================
+   一般 Button
+========================================================= */
+
+.btn-travel {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        7px;
+
+    min-height:
+        42px;
+
+    padding:
+        8px 20px;
+
+    color:
+        #fff;
+
+    background:
+        linear-gradient(135deg,
+            var(--brand),
+            var(--ocean));
+
+    border:
+        0;
+
+    border-radius:
+        999px;
+
+    font-weight:
+        700;
+
+    box-shadow:
+        0 5px 14px rgba(11, 95, 135, 0.2);
+
+    transition:
+        all 0.22s ease;
+}
+
+
+.btn-travel:hover {
+    color:
+        #fff;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 18px rgba(11, 95, 135, 0.26);
+}
+
+
+.btn-travel-green {
+    background:
+        linear-gradient(135deg,
+            var(--green),
+            var(--green-light));
+}
+
+
+.btn-travel-sun {
+    color:
+        var(--brand-dark);
+
+    background:
+        linear-gradient(135deg,
+            #FFBC43,
+            var(--sun));
+}
+
+
+/* =========================================================
+   News
+========================================================= */
+
+.news-grid {
+    display:
+        flex;
+
+    flex-direction:
+        column;
+}
+
+
+.news-item {
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    gap:
+        28px;
+
+    padding:
+        28px 18px;
+
+    border-bottom:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius);
+
+    transition:
+        background 0.22s ease,
+        transform 0.22s ease;
+}
+
+
+.news-item:hover {
+    background:
+        rgba(22, 143, 196, 0.05);
+
+    transform:
+        translateX(4px);
+}
+
+
+.news-date {
+    flex-shrink:
+        0;
+
+    width:
+        70px;
+
+    text-align:
+        center;
+}
+
+
+.news-date .day {
+    color:
+        var(--brand);
+
+    font-family:
+        "Inter",
+        sans-serif;
+
+    font-size:
+        32px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1;
+}
+
+
+.news-date .month {
+    margin-top:
+        5px;
+
+    color:
+        var(--text-muted);
+
+    font-size:
+        12px;
+}
+
+
+.news-body {
+    flex:
+        1;
+}
+
+
+.news-badge {
+    display:
+        inline-block;
+
+    margin-bottom:
+        8px;
+
+    padding:
+        3px 11px;
+
+    color:
+        var(--brand);
+
+    background:
+        var(--ocean-light);
+
+    border-radius:
+        999px;
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+}
+
+
+.news-badge.cat-2 {
+    color:
+        #9B6011;
+
+    background:
+        var(--sun-light);
+}
+
+
+.news-badge.cat-3 {
+    color:
+        var(--green-dark);
+
+    background:
+        var(--green-soft);
+}
+
+
+.news-title {
+    margin-bottom:
+        6px;
+
+    color:
+        var(--text);
+
+    font-size:
+        16.5px;
+
+    font-weight:
+        700;
+
+    line-height:
+        1.5;
+}
+
+
+.news-title a {
+    transition:
+        color 0.2s ease;
+}
+
+
+.news-title a:hover {
+    color:
+        var(--brand-link);
+}
+
+
+.news-excerpt {
+    display:
+        -webkit-box;
+
+    overflow:
+        hidden;
+
+    color:
+        var(--text-muted);
+
+    font-size:
+        14px;
+
+    line-height:
+        1.7;
+
+    -webkit-line-clamp:
+        2;
+
+    -webkit-box-orient:
+        vertical;
+}
+
+
+.news-item .thumb,
+.news-thumb-placeholder {
+    width:
+        140px;
+
+    height:
+        96px;
+
+    flex-shrink:
+        0;
+
+    border-radius:
+        var(--radius);
+
+    object-fit:
+        cover;
+}
+
+
+.news-thumb-placeholder {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    color:
+        rgba(11, 95, 135, 0.35);
+
+    font-size:
+        28px;
+
+    background:
+        linear-gradient(135deg,
+            var(--ocean-light),
+            var(--green-soft));
+}
+
+
+/* =========================================================
+   Pagination
+========================================================= */
+
+.pagination {
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        7px;
+
+    padding:
+        34px 0 8px;
+}
+
+
+.pagination a,
+.pagination span {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-width:
+        38px;
+
+    height:
+        38px;
+
+    padding:
+        0 8px;
+
+    color:
+        var(--brand);
+
+    background:
+        #fff;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        9px;
+
+    font-size:
+        14px;
+
+    font-weight:
+        600;
+
+    transition:
+        all 0.2s ease;
+}
+
+
+.pagination a:hover {
+    color:
+        var(--brand-dark);
+
+    border-color:
+        var(--ocean);
+
+    background:
+        var(--ocean-light);
+
+    transform:
+        translateY(-2px);
+}
+
+
+.pagination .active {
+    color:
+        #fff;
+
+    border-color:
+        transparent;
+
+    background:
+        linear-gradient(135deg,
+            var(--brand),
+            var(--green));
+
+    box-shadow:
+        0 4px 12px rgba(11, 95, 135, 0.2);
+}
+
+
+.pagination .disabled {
+    opacity:
+        0.4;
+
+    pointer-events:
+        none;
+}
+
+
+/* =========================================================
+   Footer
+========================================================= */
+
+footer {
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    margin-top:
+        auto;
+
+    padding:
+        38px 32px;
+
+    color:
+        rgba(255, 255, 255, 0.72);
+
+    text-align:
+        center;
+
+    font-size:
+        13.5px;
+
+    background:
+        linear-gradient(120deg,
+            #062E47 0%,
+            var(--brand-dark) 45%,
+            var(--green-dark) 100%);
+
+    border-top:
+        4px solid var(--sun);
+}
+
+
+footer::before {
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        -80px;
+
+    bottom:
+        -100px;
+
+    width:
+        300px;
+
+    height:
+        180px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(22, 143, 196, 0.09);
+}
+
+
+/* =========================================================
+   Focus
+========================================================= */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline:
+        3px solid rgba(245, 166, 35, 0.4);
+
+    outline-offset:
+        3px;
+}
+
+
+/* =========================================================
+   Tablet
+========================================================= */
+
+@media (max-width: 991.98px) {
+
+    .container {
+        padding-left:
+            20px;
+
+        padding-right:
+            20px;
+    }
+
+
+    .section {
+        padding:
+            44px 0;
+    }
+
+
+    .page-hero {
+        padding:
+            42px 22px 38px;
+    }
+}
+
+
+/* =========================================================
+   Mobile
+========================================================= */
+
+@media (max-width: 640px) {
+
+    .container {
+        padding-left:
+            16px;
+
+        padding-right:
+            16px;
+    }
+
+
+    .section {
+        padding:
+            36px 0;
+    }
+
+
+    .page-hero {
+        padding:
+            34px 18px 30px;
+    }
+
+
+    .page-hero h1 {
+        font-size:
+            25px;
+    }
+
+
+    .news-item {
+        flex-direction:
+            column;
+
+        gap:
+            14px;
+
+        padding:
+            22px 8px;
+    }
+
+
+    .news-item .thumb,
+    .news-thumb-placeholder {
+        width:
+            100%;
+
+        height:
+            190px;
+    }
+
+
+    .news-date {
+        display:
+            flex;
+
+        align-items:
+            center;
+
+        gap:
+            10px;
+
+        width:
+            auto;
+    }
+
+
+    .news-date .day {
+        font-size:
+            22px;
+    }
+
+
+    .news-date .month {
+        margin:
+            0;
+    }
+}
+
+
+/* =========================================================
+   Reduce Motion
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior:
+            auto !important;
+
+        transition-duration:
+            0.01ms !important;
+
+        animation-duration:
+            0.01ms !important;
+    }
+}
