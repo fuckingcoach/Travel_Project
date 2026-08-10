@@ -1,7 +1,8 @@
 :root{--brand:#1B2E5E;--brand-dark:#111E3F;--gold:#C9A84C;--bg:#F7F8FA;--white:#FFFFFF;--text:#1A1A2E;--text-muted:#6B7280;--border:#E5E7EB;--danger:#DC2626;--success:#16A34A;--nav-h:64px;--topbar-h:36px;--radius:8px;--shadow:0 2px 12px rgba(27,46,94,.08);}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;}
-    a{color:inherit;text-decoration:none;}
+    .section-box,
+    .section-box *,
+    .member-page,
+    .member-page *{box-sizing:border-box;}
     .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border-radius:var(--radius);font-size:14.5px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:inherit;}
     .btn-primary{background:var(--brand);color:#fff;}.btn-primary:hover{background:var(--brand-dark);}
     .btn-outline{background:transparent;color:var(--brand);border:1.5px solid var(--brand);}.btn-outline:hover{background:var(--brand);color:#fff;}

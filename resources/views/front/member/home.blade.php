@@ -2,7 +2,6 @@
 @section("title", "會員中心")
 
 @push("style")
-<link rel="stylesheet" href="/css/front/index.css">
 <link rel="stylesheet" href="/css/front/member/home.css">
 <link rel="stylesheet" href="/css/front/member/changePwd.css">
 <link rel="stylesheet" href="{{ asset('css/front/views.css') }}">
