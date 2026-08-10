@@ -183,8 +183,8 @@ class AdminViewsController extends Controller
                     $imgs = Img::where('viewsID', $id)->get();
                     foreach ($imgs as $img) {
                         // 將檔案由資料夾中刪除(含小圖)
-                        // unlink("images/views/" . $img->imgSrc);
-                        // unlink("images/views/S/" . $img->imgSrc);
+                        unlink("images/views/" . $img->imgSrc);
+                        unlink("images/views/S/" . $img->imgSrc);
                         // 將資料由news資料表刪除
                         $img->delete();
                     }
