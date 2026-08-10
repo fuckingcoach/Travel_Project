@@ -37,7 +37,6 @@ TravelGuide 是一套以 Laravel 開發的台灣旅遊導覽網站，整合景�
 | 圖片輪播 | Swiper 11 |
 | 身分驗證 | Laravel Auth、Sanctum |
 | 驗證碼 | mews/captcha |
-| 建置工具 | Vite 8、npm |
 | 測試 | PHPUnit 12 |
 
 ## 主要功能
@@ -135,18 +134,17 @@ API 預設以 `/api` 為前綴。
 
 - PHP 8.3 以上
 - Composer
-- Node.js 與 npm
 - PHP SQLite 擴充套件
 
 ### 1. 安裝相依套件
 
 ```powershell
 composer install
-npm install
 ```
 
 ### 2. 建立環境設定
 
+如果預設的.env環境設定檔不能使用，請從.env.example複製：
 ```powershell
 Copy-Item .env.example .env
 php artisan key:generate
@@ -171,20 +169,24 @@ php artisan migrate:fresh --seed
 ```
 
 此操作會清除目前資料庫內容，請勿在含有正式資料的環境執行。
+並載入範例資料表：
+database/seeders/DatabaseSeeder.php
+database/seeders/ManagerSeeder.php
+database/seeders/MemberSeeder.php
+database/seeders/WishlistSeeder.php
 
 ### 4. 啟動專案
 
-使用整合開發指令：
+使用 Composer 開發指令：
 
 ```powershell
 composer run dev
 ```
 
-或分別啟動 Laravel 與 Vite：
+或直接啟動 Laravel：
 
 ```powershell
 php artisan serve
-npm run dev
 ```
 
 開啟瀏覽器前往：
@@ -212,9 +214,6 @@ php artisan test
 
 # 清除 Laravel 快取
 php artisan optimize:clear
-
-# 建置正式前端資源
-npm run build
 
 # 自動格式化 PHP 程式碼
 vendor/bin/pint

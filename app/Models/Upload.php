@@ -53,8 +53,8 @@ class Upload extends Model
         }
 
         // 副檔名(.jpg, .png)
-        //$ext = $photo->extension();
-        $ext = "jpg";
+        $ext = $photo->extension();
+        // $ext = "jpg";
 
         $times = explode(" ", microtime());
 

@@ -94,11 +94,11 @@
         @endif
       </div>
 
-      <a href="/cart" class="cart">
+      <!-- <a href="/cart" class="cart">
         <i class="fa fa-shopping-cart"></i>
         <span>收藏清單</span>
         <span class="cart-badge" id="cart">3</span>
-      </a>
+      </a> -->
     </div>
   </div>
 </nav>
