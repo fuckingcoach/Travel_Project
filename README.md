@@ -166,26 +166,27 @@ member_wishlists
 
 本專題部分前端功能透過 Axios 呼叫 Laravel API，API 負責處理資料查詢、會員資料與收藏等功能。
 
-### 景點 API
-
-| 方法 | 路徑                 | 功能                               | 前端使用位置 |
-| ---- | -------------------- | ---------------------------------- | ------------ |
-| GET  | `/api/views/getView` | 查詢景點資料，可依分類與關鍵字篩選 | 景點列表     |
-| GET  | `/api/views/...`     | 景點相關資料操作                   | 景點管理     |
 
 ### 會員 API
 
 | 方法 | 路徑                       | 功能                 | 前端使用位置 |
 | ---- | -------------------------- | -------------------- | ------------ |
-| GET  | `/api/member/home/profile` | 取得目前登入會員資料 | 會員中心     |
+| GET  | `/api/member/profile` | 取得目前登入會員資料 | 會員中心     |
+| POST | `/api/member/update`  | 更新會員資料        | 會員中心     |
+| GET  | `/api/member/checkEmail` | 確認會員信箱是否已被使用 | 會員中心     |
+| GET  | `/api/member/updatePwd` | 更新會員密碼      | 會員中心     |
+
 
 ### 收藏 API
 
 | 方法   | 路徑                   | 功能             | 前端使用位置       |
 | ------ | ---------------------- | ---------------- | ------------------ |
 | GET    | `/api/wishlist/list`   | 取得會員收藏列表 | 會員中心           |
-| POST   | `/api/wishlist/add`    | 新增景點收藏     | 景點頁面           |
+| POST   | `/api/wishlist/add`    | 新增景點收藏     | 景點頁面、收藏列表 |
 | DELETE | `/api/wishlist/delete` | 刪除景點收藏     | 景點頁面、收藏列表 |
+| DELETE | `/api/wishlist/checkLiked` | 確認景點收藏     | 景點頁面、收藏列表 |
+| DELETE | `/api/wishlist/getLikes` | 取得景點被收藏數     | 景點頁面 |
+
 
 實際 API 路由會依照專案目前的 `routes/api.php` 設定為準。
 
@@ -279,6 +280,91 @@ Dashboard 使用統計卡片、圖表與排行方式呈現網站資料。
 - Top 10 景點
 
 讓管理者可以快速了解目前網站的資料狀況。
+
+## 核心功能
+
+### 資料庫交易
+
+景點與景點圖片資料具有關聯性，因此在新增、修改或刪除時使用 Laravel Transaction，
+確保其中一個操作失敗時可以回復資料，避免產生不完整的資料。
+
+```php
+        // 開始交易
+        DB::beginTransaction();
+        try {
+            // 要刪除的id[], 傳過來的是陣列
+            $ids = $req->ids;
+            // sweet alert的訊息
+            $msg = "";
+            //如果有勾選要刪除的選項
+            if (!empty($ids)) {
+                $msg = "已刪除";
+                foreach ($ids as $id) {
+                    // 取得要刪除的該筆資料
+                    $view = Views::find($id);
+                    // 取得檔名
+                    $imgs = Img::where('viewsID', $id)->get();
+                    foreach ($imgs as $img) {
+                        // 將檔案由資料夾中刪除(含小圖)
+                        unlink("images/views/" . $img->imgSrc);
+                        unlink("images/views/S/" . $img->imgSrc);
+                        // 將資料由news資料表刪除
+                        $img->delete();
+                    }
+                    // 將收藏名單刪除
+                    $wishlists = MemberWishlist::where("viewsId", $id)->get();
+                    foreach ($wishlists as $list) {
+                        $list->delete();
+                    }
+                    $view->delete();
+                }
+            } else {
+                // 未勾選任何資料
+                $msg = "未選擇要刪除的資料";
+            }
+            //完成交易
+            Db::commit();
+            return response()->json([
+                'message' => $msg
+            ]);
+        } catch (\Throwable $e) {
+            //退回交易
+            DB::rollBack();
+            Log::error('Delete View Failed: ' . $e->getMessage());
+            $msg = "刪除失敗";
+            return response()->json([
+                "message" => $msg,
+                // 正式環境建議隱藏具體錯誤細節，開發環境（config('app.debug')）才顯示
+                "error"   => config('app.debug') ? $e->getMessage() : '伺服器內部錯誤'
+            ], 500);
+        }
+```
+
+### 會員中心SPA架構
+
+會員中心採用 SPA 的方式處理頁面切換，使用 Axios 呼叫後端 API，
+取得資料後直接更新前端內容，避免每次操作都重新載入整個頁面。
+
+### 會員資料
+
+![會員資料](./images/member-profile.png)
+
+點擊「會員資料」後，透過 Axios 取得會員資訊並更新畫面。
+
+### 修改會員
+
+會員可修改個人資料，並且可以上傳個人頭像，個人頭像、名稱、信箱會在修改完成後渲染在會員中心首頁。
+
+### 收藏景點
+
+![收藏景點](./images/member-wishlist.png)
+
+收藏景點透過 API 取得資料，並在前端動態渲染收藏清單，會員可點擊愛心來收藏或取消。
+
+### 密碼更新
+
+修改登入密碼，更新前會驗證密碼是否符合規範，後端也會再做一次驗證，確認後再對密碼加密，最後更新會員資料庫。
+
 
 ## 開發過程中解決的問題
 
