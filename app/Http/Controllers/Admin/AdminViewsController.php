@@ -189,7 +189,7 @@ class AdminViewsController extends Controller
                         $img->delete();
                     }
 
-                    $wishlists = MemberWishlist::where("viewsId", $id);
+                    $wishlists = MemberWishlist::where("viewsId", $id)->get();
                     foreach ($wishlists as $list) {
                         $list->delete();
                     }
