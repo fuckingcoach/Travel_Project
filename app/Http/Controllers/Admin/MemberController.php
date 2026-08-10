@@ -6,6 +6,9 @@ use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Controller;
+use App\Models\MemberWishlist;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MemberController extends Controller
 {
@@ -78,18 +81,46 @@ class MemberController extends Controller
     //D - Delete (刪除)：刪除指定 ID 的會員
     public function delete(Request $req)
     {
-        $ids = $req->id;
-        $msg = "";
+        DB::beginTransaction();
 
-        if (!empty($ids)) {
-            $msg = "已刪除";
-            foreach ($ids as $id) {
-                $member = Member::find($id);
-                $member->delete();
+        try {
+            $ids = $req->ids;
+            $msg = "";
+
+            if (!empty($ids)) {
+                $msg = "已刪除";
+                foreach ($ids as $id) {
+                    $wishlists = MemberWishlist::where("memberId", $id)->get();
+                    if (!empty($wishlists)) {
+                        foreach ($wishlists as $list) {
+                            $list->delete();
+                        }
+                    }
+                    $member = Member::find($id);
+                    $member->delete();
+                }
+            } else {
+                $msg = "請選擇要刪除的資料";
             }
-        } else {
-            $msg = "請選擇要刪除的資料";
+
+            Db::commit();
+
+            return response()->json([
+                'message' => $msg
+            ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            Log::error('Delete View Failed: ' . $e->getMessage());
+
+            $msg = "刪除失敗";
+            return response()->json([
+                "message" => $msg,
+                // 正式環境建議隱藏具體錯誤細節，開發環境（config('app.debug')）才顯示
+                "error"   => config('app.debug') ? $e->getMessage() : '伺服器內部錯誤'
+            ], 500);
         }
+
 
         Session::flash("message", $msg);
         return redirect("admin/member/list");

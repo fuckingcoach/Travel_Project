@@ -33,9 +33,9 @@
             </div>
         </div>
 
-        <!-- <div class="col-md-4">
+        <div class="col-md-4">
             <div class="card dashboard-card">
-                <div class="card-body">
+                <div class="card-body d-flex align-items-center">
                     <div class="card-icon bg-warning text-white me-3">
                         <i class="bi bi-bar-chart"></i>
                     </div>
@@ -45,7 +45,7 @@
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
 
         <div class="col-md-8">
             <div class="card dashboard-card chart-card">

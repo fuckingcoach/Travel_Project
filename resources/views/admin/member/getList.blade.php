@@ -12,7 +12,6 @@
     <td class="col-2 text-center border border-dark align-middle">{{ $member->updated_at }}</td>
     <td class="col-1 text-center border border-dark align-middle">
         <a href="edit/{{ $member->id }}" class="btn btn-success">修改</a>
-        <a href="#" class="btn btn-danger" onclick="doDelete('form1')">刪除</a>
     </td>
 </tr>
 @endforeach

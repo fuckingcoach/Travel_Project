@@ -1,4 +1,4 @@
-@extends("front.layout")
+@extends("admin.layout")
 
 @section("title")
 景點類型管理

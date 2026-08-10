@@ -124,6 +124,12 @@
                         景點管理
                     </a>
                 </li>
+                <li>
+                    <a class="nav-link" href="/admin/viewstype/list">
+                        <i class="bi bi-files me-2"></i>
+                        景點類型管理
+                    </a>
+                </li>
             </ul>
         </div>
 

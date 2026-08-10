@@ -10,7 +10,7 @@ Route::group(["prefix" => "admin"], function () {
         Route::post("store", [MemberController::class, "store"]);
         Route::get("edit/{id}", [MemberController::class, "edit"]);
         Route::post("update", [MemberController::class, "update"]);
-        Route::post("delete", [MemberController::class, "delete"]);
+        Route::delete("delete", [MemberController::class, "delete"]);
         Route::get("getMembers", [MemberController::class, "getMembers"]);
     });
 });
