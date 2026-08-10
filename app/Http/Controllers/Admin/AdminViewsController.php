@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Img;
+use App\Models\MemberWishlist;
 use App\Models\Views;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -186,6 +187,11 @@ class AdminViewsController extends Controller
                         unlink("images/views/S/" . $img->imgSrc);
                         // 將資料由news資料表刪除
                         $img->delete();
+                    }
+
+                    $wishlists = MemberWishlist::where("viewsId", $id);
+                    foreach ($wishlists as $list) {
+                        $list->delete();
                     }
                     $view->delete();
                 }
