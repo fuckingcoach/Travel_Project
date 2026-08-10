@@ -35,7 +35,6 @@ TravelGuide 是一套以 Laravel 開發的台灣旅遊導覽網站，整合景�
 | 前端 | Blade、HTML5、CSS3、Bootstrap 5 |
 | 互動功能 | JavaScript、jQuery、Vue 3、Axios |
 | 圖片輪播 | Swiper 11 |
-| 身分驗證 | Laravel Auth、Sanctum |
 | 驗證碼 | mews/captcha |
 | 測試 | PHPUnit 12 |
 
@@ -248,3 +247,81 @@ routes/
 ## 授權
 
 本專案以 Laravel 框架為基礎開發。Laravel 採用 [MIT License](https://opensource.org/licenses/MIT) 授權。
+
+### 專案畫面截圖
+
+#### 首頁
+
+![首頁畫面](docs/sc/w1600-home.png)
+
+#### 景點列表
+
+![景點列表畫面](docs/sc/w1600-views.png)
+
+#### 景點詳細內容
+
+![景點詳細內容畫面](docs/sc/w1600-views_detail.png)
+
+#### 會員中心
+
+![景點詳細內容畫面](docs/sc/w1600-views_detail.png)
+
+#### 收藏景點
+
+![景點詳細內容畫面](docs/sc/w1600-views_detail.png)
+
+#### 後台管理頁
+
+![後台管理頁畫面](docs/sc/w1600-admin_home.png)
+
+#### 後台管理頁-功能選單
+
+![後台管理頁-功能選單畫面](docs/sc/w1600-admin_home_nav.png)
+
+#### 後台管理景點清單頁
+
+![後台管理景點清單頁](docs/sc/w1200-admin_views_list.png)
+
+#### 後台管理會員清單頁
+
+![後台管理會員清單頁](docs/sc/w1200-admin_member_list.png)
+
+### RWD 檢查截圖
+
+#### 桌機寬度 1200px
+
+![home](docs/sc/w1200-home.png)
+
+![views](docs/sc/w1200-views.png)
+
+![food](docs/sc/w1200-food.png)
+
+![views_detail](docs/sc/w1200-views_detail.png)
+
+#### 平板寬度 768px
+
+![home](docs/sc/w768-home.png)
+
+![views](docs/sc/w768-views.png)
+
+![food](docs/sc/w768-food.png)
+
+![views_detail](docs/sc/w768-views_detail.png)
+
+#### 手機寬度 375px
+
+![home](docs/sc/w375-home.png)
+
+![views](docs/sc/w375-views.png)
+
+![food](docs/sc/w375-food.png)
+
+![views_detail](docs/sc/w375-views_detail.png)
+
+## 開發者資訊
+
+| 項目 | 內容 |
+| --- | --- |
+| 開發者 | Lin Yu Chun |
+| 專案名稱 | Travel Guide |
+| GitHub Repository | https://github.com/linyu70367/TravelGuide |
