@@ -49,21 +49,23 @@ TravelGuide 是一套以 Laravel 開發的台灣旅遊導覽網站，整合景�
 | 景點詳細頁 | `/views/{id}` | 顯示景點介紹、地址、圖片與收藏功能 |
 | 美食列表 | `/travelfood` | 顯示農業部開放資料中的地方美食 |
 | 美食詳細頁 | `/travelfood/{id}` | 顯示美食詳細資訊 |
-| 關於本站 | `/about` | 網站介紹 |
+| 關於本站 | `/about` | 網站介紹、基礎圖表 |
 | 會員登入 | `/member/login` | 會員登入 |
 | 會員註冊 | `/member/register` | 建立會員帳號 |
 | 會員中心 | `/member/home` | 管理個人資料及收藏內容 |
 
 ### 後台
 
-| 功能 | 路徑 |
-| --- | --- |
-| 管理員登入 | `/admin` |
-| 管理首頁 | `/admin/home` |
-| 景點管理 | `/admin/views/list` |
-| 新增景點 | `/admin/views/add` |
-| 景點分類管理 | `/admin/viewstype` |
-| 會員管理 | `/admin/member/list` |
+| 功能 | 路徑 | 功能 |
+| --- | --- | --- |
+| 管理員登入 | `/admin` | 圖形驗證碼 |
+| 管理首頁 | `/admin/home` | 圖表(景點收藏次數、瀏覽次數) |
+| 景點管理 | `/admin/views/list` | 景點管理(刪除) |
+| 景點管理-修改 | `/admin/views/edit/{id}` | 景點(修改)、圖片(刪除、新增) |
+| 景點管理-新增 | `/admin/views/add` | 景點(新增) |
+| 景點分類管理 | `/admin/viewstype` | 景點分類(新增、修改、刪除) |
+| 會員管理 | `/admin/member/list` | 會員(刪除) |
+| 會員管理-修改 | `/admin/member/edit/{id}` | 會員(修改) |
 
 除登入頁外，後台功能均由 `manager` middleware 保護。
 
@@ -80,7 +82,15 @@ TravelGuide 是一套以 Laravel 開發的台灣旅遊導覽網站，整合景�
 | `users` | Laravel 使用者 | `name`、`email`、`password` |
 | `personal_access_tokens` | Sanctum Token | Token 名稱、權限及有效期限 |
 
-專案另包含 Laravel 預設的 session、cache、queue 與 password reset 資料表。
+資料表之間的關聯：
+| 資料表1 | 欄位 | 關聯 | 資料表2 | 欄位 |
+| --- | --- | --- | --- | --- |
+| views | id | 一對多 | imgs | viewsId |
+| views | typeId | 多對一 | views_types | id |
+| member_wishlists | memberId | 多對一 | member | id |
+| member_wishlists | viewsId | 多對一 | views | id |
+
+
 
 ## API
 
@@ -169,20 +179,18 @@ php artisan migrate:fresh --seed
 
 此操作會清除目前資料庫內容，請勿在含有正式資料的環境執行。
 並載入範例資料表：
-database/seeders/DatabaseSeeder.php
-database/seeders/ManagerSeeder.php
-database/seeders/MemberSeeder.php
-database/seeders/WishlistSeeder.php
+| 資料表 | 路徑 |
+| --- | --- |
+| views_types | `database/seeders/DatabaseSeeder.php` |
+| imgs | `database/seeders/DatabaseSeeder.php` |
+| views | `database/seeders/DatabaseSeeder.php` |
+| manager | `database/seeders/ManagerSeeder.php` |
+| members | `database/seeders/MemberSeeder.php` |
+| wish_lists | `database/seeders/WishlistSeeder.php` |
 
 ### 4. 啟動專案
 
-使用 Composer 開發指令：
-
-```powershell
-composer run dev
-```
-
-或直接啟動 Laravel：
+啟動 Laravel：
 
 ```powershell
 php artisan serve
@@ -204,19 +212,6 @@ http://127.0.0.1:8000
 - 會員頭像：`public/images/member/`
 
 首頁輪播會依檔名自然排序，自動選取 `public/images/views/` 根目錄內前 20 張 JPG、JPEG、PNG 或 WebP 圖片，不會讀取 `S` 子資料夾。
-
-## 常用指令
-
-```powershell
-# 執行測試
-php artisan test
-
-# 清除 Laravel 快取
-php artisan optimize:clear
-
-# 自動格式化 PHP 程式碼
-vendor/bin/pint
-```
 
 ## 專案目錄
 
@@ -248,6 +243,7 @@ routes/
 
 本專案以 Laravel 框架為基礎開發。Laravel 採用 [MIT License](https://opensource.org/licenses/MIT) 授權。
 
+
 ### 專案畫面截圖
 
 #### 首頁
@@ -264,11 +260,11 @@ routes/
 
 #### 會員中心
 
-![景點詳細內容畫面](docs/sc/w1600-views_detail.png)
+![會員中心畫面](docs/sc/w1600-member_home.png)
 
 #### 收藏景點
 
-![景點詳細內容畫面](docs/sc/w1600-views_detail.png)
+![收藏景點畫面](docs/sc/w1600-member_collects.png)
 
 #### 後台管理頁
 
