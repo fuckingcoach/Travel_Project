@@ -188,7 +188,7 @@ class AdminViewsController extends Controller
                         // 將資料由news資料表刪除
                         $img->delete();
                     }
-
+                    // 將收藏名單刪除
                     $wishlists = MemberWishlist::where("viewsId", $id)->get();
                     foreach ($wishlists as $list) {
                         $list->delete();
