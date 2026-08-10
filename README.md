@@ -34,49 +34,32 @@
 | 後台管理     | 提供管理者管理會員、景點、景點分類與景點圖片等資料。     | `docs/screenshots/admin.png`       |
 | Dashboard    | 顯示網站統計資訊與景點排行，協助管理者快速了解網站資料。 | `docs/screenshots/dashboard.png`   |
 
-### 截圖說明
-
-請將實際截圖放在 `docs/screenshots/` 資料夾，建議檔名如下：
-
-| 檔名              | 說明                 |
-| ----------------- | -------------------- |
-| `home.png`        | 前台首頁             |
-| `views.png`       | 景點列表、搜尋與分類 |
-| `view-detail.png` | 景點詳細內容         |
-| `login.png`       | 會員登入             |
-| `member.png`      | 會員中心             |
-| `wishlist.png`    | 收藏景點             |
-| `admin.png`       | 後台景點管理         |
-| `dashboard.png`   | 後台 Dashboard       |
-| `rwd-1200.png`    | 桌機寬度 1200px      |
-| `rwd-768.png`     | 平板寬度 768px       |
-| `rwd-375.png`     | 手機寬度 375px       |
-
 ### 專案畫面截圖
 
 #### 首頁
 ![首頁畫面](docs/screenshots/home.png)
 #### 景點列表
-
+![景點列表頁面](docs/screenshots/views.png)
 #### 景點詳細內容
-
+![景點詳細頁面](docs/screenshots/view.png)
 #### 會員登入
-
+![登入畫面](docs/screenshots/login.png)
 #### 會員中心
-
+![會員中心畫面](docs/screenshots/member.png)
 #### 收藏景點
-
+![收藏景點畫面](docs/screenshots/wishlist.png)
 #### 後台管理
-
+![後臺管理畫面](docs/screenshots/admin.png)
 #### Dashboard
-
+![後臺儀錶板畫面](docs/screenshots/dashboard.png)
 ### RWD 檢查截圖
 
 #### 桌機寬度 1200px
-
+![桌機畫面](docs/screenshots/rwd-1200.png)
 #### 平板寬度 768px
-
+![平板畫面](docs/screenshots/rwd-768.png)
 #### 手機寬度 375px
+![手機畫面](docs/screenshots/rwd-375.png)
 
 ## 資料庫設計說明
 
