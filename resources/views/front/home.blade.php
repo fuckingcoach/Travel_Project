@@ -27,29 +27,17 @@
   <div class="swiper heroSwiper">
     <div class="swiper-wrapper">
 
-      <!-- 預設背景圖 1 -->
-      <div class="swiper-slide" style="background-image: url('{{ asset('images/front/detail-hero.jpg') }}');">
+      <!-- 自動載入 public/images/views 根目錄內的輪播圖片 -->
+      @forelse($heroImages as $heroImage)
+      <div class="swiper-slide" style="background-image: url('{{ asset($heroImage) }}');">
         <div class="hero-overlay"></div>
       </div>
 
-      <!-- 預設背景圖 2 -->
-      <div class="swiper-slide" style="background-image: url('{{ asset('images/front/hero-banner.jpg') }}');">
+      @empty
+      <div class="swiper-slide" style="background-color: var(--burgundy-dark);">
         <div class="hero-overlay"></div>
       </div>
-
-      <!-- 動態載入景點圖片作為輪播 -->
-      @if(isset($recentViews) && $recentViews->isNotEmpty())
-      @foreach($recentViews->take(4) as $slide)
-      @php
-      $firstImg = $slide->imgs?->first()?->imgSrc;
-      @endphp
-      @if($firstImg)
-      <div class="swiper-slide" style="background-image: url('{{ asset('images/views/' . $firstImg) }}');">
-        <div class="hero-overlay"></div>
-      </div>
-      @endif
-      @endforeach
-      @endif
+      @endforelse
 
     </div>
 

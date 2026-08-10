@@ -325,3 +325,33 @@ body {
         display: block !important;
     }
 }
+
+@media screen and (max-width: 575.98px) {
+    .table-rwd {
+        width: 100% !important;
+        min-width: 0 !important;
+        table-layout: fixed;
+    }
+
+    .table-rwd tbody,
+    .table-rwd tbody tr {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .table-rwd tbody tr td > span {
+        flex: 1 1 0;
+        width: auto;
+        min-width: 0;
+    }
+
+    .table-rwd tbody tr td img,
+    .table-rwd tbody tr td .img-fluid {
+        display: block;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        object-fit: contain !important;
+    }
+}

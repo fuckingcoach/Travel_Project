@@ -309,23 +309,7 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
-    /*
-     * 如果路由寫在 routes/web.php：
-     * /viewstype
-     *
-     * 如果路由寫在 routes/api.php：
-     * 改成 /api/viewstype
-     */
-    const viewTypeApi = @json(url('/viewstype'));
-
-    /*
-     * 若路由寫在 web.php，POST、PUT、DELETE 需要 CSRF Token。
-     */
-    const csrfToken = @json(csrf_token());
-
-    axios.defaults.headers.common['Accept'] = 'application/json';
-    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+    const viewTypeApi = '/api/viewstype';
 
     const App = {
         data() {
@@ -450,48 +434,57 @@
             /*
              * GET /viewstype
              */
-            async fetchTypes() {
-                this.loading = true;
-                this.errorMessage = '';
+            fetchTypes() {
+                const vm = this;
 
-                try {
-                    const response = await axios.get(viewTypeApi);
+                vm.loading = true;
+                vm.errorMessage = '';
 
-                    const data = this.getResponseData(response);
+                return axios
+                    .get(viewTypeApi, {
+                        params: {},
+                        timeout: 5000
+                    })
+                    .then(function(response) {
+                        const data = vm.getResponseData(response);
 
-                    if (!Array.isArray(data)) {
-                        throw new Error('API 回傳格式錯誤，data 必須是陣列');
-                    }
+                        if (!Array.isArray(data)) {
+                            throw new Error('API 回傳格式錯誤，data 必須是陣列');
+                        }
 
-                    /*
-                     * 使用展開運算子複製資料，
-                     * 避免 sort() 直接修改 API 原始陣列。
-                     */
-                    this.types = [...data].sort(function(a, b) {
-                        return Number(a.id) - Number(b.id);
+                        /*
+                         * 使用展開運算子複製資料，
+                         * 避免 sort() 直接修改 API 原始陣列。
+                         */
+                        vm.types = [...data].sort(function(a, b) {
+                            return Number(a.id) - Number(b.id);
+                        });
+                    })
+                    .catch(function(error) {
+                        console.error('取得景點類型失敗：', error);
+
+                        vm.errorMessage = vm.getErrorMessage(
+                            error,
+                            '無法取得景點類型列表'
+                        );
+                    })
+                    .finally(function() {
+                        vm.loading = false;
                     });
-                } catch (error) {
-                    console.error('取得景點類型失敗：', error);
-
-                    this.errorMessage = this.getErrorMessage(
-                        error,
-                        '無法取得景點類型列表'
-                    );
-                } finally {
-                    this.loading = false;
-                }
             },
 
             /*
              * POST /viewstype
              */
-            async createType() {
-                this.clearMessages();
+            createType() {
+                const vm = this;
 
-                const typeName = this.createForm.typeName.trim();
+                vm.clearMessages();
+
+                const typeName = vm.createForm.typeName.trim();
 
                 if (!typeName) {
-                    this.errorMessage = '請輸入類型名稱';
+                    vm.errorMessage = '請輸入類型名稱';
                     return;
                 }
 
@@ -499,53 +492,58 @@
                  * 前端先檢查 typeName 是否重複。
                  * 後端仍然必須使用 unique 驗證。
                  */
-                const isDuplicate = this.types.some(function(item) {
+                const isDuplicate = vm.types.some(function(item) {
                     return String(item.typeName)
                         .trim()
                         .toLowerCase() === typeName.toLowerCase();
                 });
 
                 if (isDuplicate) {
-                    this.errorMessage = '類型名稱不能重複';
+                    vm.errorMessage = '類型名稱不能重複';
                     return;
                 }
 
-                this.creating = true;
+                vm.creating = true;
 
-                try {
-                    const newId = this.nextAvailableId;
+                const newId = vm.nextAvailableId;
 
-                    const response = await axios.post(
+                return axios
+                    .post(
                         viewTypeApi, {
                             id: newId,
                             typeName: typeName
+                        }, {
+                            timeout: 5000
                         }
-                    );
+                    )
+                    .then(function(response) {
+                        console.log('新增結果：', response.data);
 
-                    console.log('新增結果：', response.data);
+                        vm.createForm.typeName = '';
+                        vm.successMessage = `新增成功，新的 ID 為 ${newId}`;
 
-                    this.createForm.typeName = '';
+                        return vm.fetchTypes();
+                    })
+                    .catch(function(error) {
+                        console.error('新增景點類型失敗：', error);
 
-                    this.successMessage =
-                        `新增成功，新的 ID 為 ${newId}`;
+                        const errorMessage = vm.getErrorMessage(
+                            error,
+                            '新增景點類型失敗'
+                        );
 
-                    await this.fetchTypes();
-                } catch (error) {
-                    console.error('新增景點類型失敗：', error);
-
-                    /*
-                     * 發生錯誤時重新取得資料，
-                     * 避免其他使用者剛好新增相同 ID。
-                     */
-                    await this.fetchTypes();
-
-                    this.errorMessage = this.getErrorMessage(
-                        error,
-                        '新增景點類型失敗'
-                    );
-                } finally {
-                    this.creating = false;
-                }
+                        /*
+                         * 發生錯誤時重新取得資料，
+                         * 避免其他使用者剛好新增相同 ID。
+                         */
+                        return vm.fetchTypes()
+                            .finally(function() {
+                                vm.errorMessage = errorMessage;
+                            });
+                    })
+                    .finally(function() {
+                        vm.creating = false;
+                    });
             },
 
             startEdit(item) {
@@ -576,27 +574,29 @@
              * Request Body 只傳 typeName，
              * 不傳送也不修改 id。
              */
-            async updateType() {
-                this.clearMessages();
+            updateType() {
+                const vm = this;
 
-                if (this.editingId === null) {
-                    this.errorMessage = '找不到要更新的資料';
+                vm.clearMessages();
+
+                if (vm.editingId === null) {
+                    vm.errorMessage = '找不到要更新的資料';
                     return;
                 }
 
-                const typeName = this.editForm.typeName.trim();
+                const typeName = vm.editForm.typeName.trim();
 
                 if (!typeName) {
-                    this.errorMessage = '請輸入類型名稱';
+                    vm.errorMessage = '請輸入類型名稱';
                     return;
                 }
 
                 /*
                  * 檢查其他資料是否已有相同 typeName。
                  */
-                const isDuplicate = this.types.some((item) => {
+                const isDuplicate = vm.types.some(function(item) {
                     return (
-                        Number(item.id) !== this.editingId &&
+                        Number(item.id) !== vm.editingId &&
                         String(item.typeName)
                         .trim()
                         .toLowerCase() === typeName.toLowerCase()
@@ -604,43 +604,48 @@
                 });
 
                 if (isDuplicate) {
-                    this.errorMessage = '類型名稱不能重複';
+                    vm.errorMessage = '類型名稱不能重複';
                     return;
                 }
 
-                this.updating = true;
+                vm.updating = true;
 
-                try {
-                    const response = await axios.put(
-                        `${viewTypeApi}/${encodeURIComponent(this.editingId)}`, {
+                return axios
+                    .put(
+                        `${viewTypeApi}/${encodeURIComponent(vm.editingId)}`, {
                             typeName: typeName
+                        }, {
+                            timeout: 5000
                         }
-                    );
+                    )
+                    .then(function(response) {
+                        console.log('更新結果：', response.data);
 
-                    console.log('更新結果：', response.data);
+                        vm.successMessage = '景點類型更新成功';
+                        vm.cancelEdit();
 
-                    this.successMessage = '景點類型更新成功';
+                        return vm.fetchTypes();
+                    })
+                    .catch(function(error) {
+                        console.error('更新景點類型失敗：', error);
 
-                    this.cancelEdit();
-
-                    await this.fetchTypes();
-                } catch (error) {
-                    console.error('更新景點類型失敗：', error);
-
-                    this.errorMessage = this.getErrorMessage(
-                        error,
-                        '更新景點類型失敗'
-                    );
-                } finally {
-                    this.updating = false;
-                }
+                        vm.errorMessage = vm.getErrorMessage(
+                            error,
+                            '更新景點類型失敗'
+                        );
+                    })
+                    .finally(function() {
+                        vm.updating = false;
+                    });
             },
 
             /*
              * DELETE /viewstype/{id}
              */
-            async deleteType(item) {
-                this.clearMessages();
+            deleteType(item) {
+                const vm = this;
+
+                vm.clearMessages();
 
                 const confirmed = window.confirm(
                     `確定要刪除 ID ${item.id}「${item.typeName}」嗎？`
@@ -650,32 +655,36 @@
                     return;
                 }
 
-                this.deletingId = Number(item.id);
+                vm.deletingId = Number(item.id);
 
-                try {
-                    const response = await axios.delete(
-                        `${viewTypeApi}/${encodeURIComponent(item.id)}`
-                    );
+                return axios
+                    .delete(
+                        `${viewTypeApi}/${encodeURIComponent(item.id)}`, {
+                            timeout: 5000
+                        }
+                    )
+                    .then(function(response) {
+                        console.log('刪除結果：', response.data);
 
-                    console.log('刪除結果：', response.data);
+                        vm.successMessage = '景點類型刪除成功';
 
-                    this.successMessage = '景點類型刪除成功';
+                        if (vm.editingId === Number(item.id)) {
+                            vm.cancelEdit();
+                        }
 
-                    if (this.editingId === Number(item.id)) {
-                        this.cancelEdit();
-                    }
+                        return vm.fetchTypes();
+                    })
+                    .catch(function(error) {
+                        console.error('刪除景點類型失敗：', error);
 
-                    await this.fetchTypes();
-                } catch (error) {
-                    console.error('刪除景點類型失敗：', error);
-
-                    this.errorMessage = this.getErrorMessage(
-                        error,
-                        '刪除景點類型失敗'
-                    );
-                } finally {
-                    this.deletingId = null;
-                }
+                        vm.errorMessage = vm.getErrorMessage(
+                            error,
+                            '刪除景點類型失敗'
+                        );
+                    })
+                    .finally(function() {
+                        vm.deletingId = null;
+                    });
             },
 
             formatDate(dateString) {

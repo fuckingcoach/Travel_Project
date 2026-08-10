@@ -5,7 +5,7 @@
 @endsection
 
 @push("style")
-<link rel="stylesheet" href="{{ asset('css/front/travelfood.css') }}">
+<link rel="stylesheet" href="{{ asset('css/front/travelfood.css') }}?v={{ filemtime(public_path('css/front/travelfood.css')) }}">
 @endpush
 
 @section("content")

@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="/css/fontAwesome.css">
   <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ asset('css/my.css') }}">
-  <link rel="stylesheet" href="/css/front/news.css">
+  <link rel="stylesheet" href="/css/front/layout.css">
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/front/header.css">
   <link rel="stylesheet" href="/css/lightbox.min.css">
@@ -24,6 +24,7 @@
   <script src="https://cdn.jsdelivr.net/npm/axios@1.13.2/dist/axios.min.js"></script>
   <script src="/js/lightbox.min.js"></script>
   @stack("style")
+  <link rel="stylesheet" href="{{ asset('css/front/vintage.css') }}?v={{ filemtime(public_path('css/front/vintage.css')) }}">
   @stack('script')
 </head>
 
