@@ -395,6 +395,8 @@ Dashboard 使用統計卡片、圖表與排行方式呈現網站資料。
 | 路由檢查     | php artisan route:list                                                     | 通過                                   |
 | API          | 使用POSTMAN測試API                                                         | 通過                                   |
 
+#### PostMan 測試截圖
+
 ![PostMan](docs/screenshots/postman-check.png)
 
 ## 安裝與執行方式
