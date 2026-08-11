@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 
@@ -131,7 +132,7 @@ class MemberController extends Controller
         $member = new Member();
         $member->memberName = $req->memberName;
         $member->email = $req->email;
-        $member->pwd = $req->pwd;
+        $member->pwd = Hash::make($req->pwd);
         $member->tel = $req->tel;
         $member->address = "";
         $member->birthday = "";

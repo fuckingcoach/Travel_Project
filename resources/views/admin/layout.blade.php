@@ -90,10 +90,10 @@
             </a>
         </div>
 
-        <form method="POST" action="/logout">
+        <form method="POST" action="/admin/logout">
             <input type="hidden" name="id">
             @csrf
-            <button type="button" class="btn btn-light btn-sm">
+            <button type="button" class="btn btn-light btn-sm" onclick="Logout()">
                 <i class="bi bi-box-arrow-right"></i>
                 登出
             </button>
@@ -151,6 +151,29 @@
                 $('input[name="id[]"]').prop('checked', $(this).prop("checked"));
             });
         });
+
+        function Logout() {
+            Swal.fire({
+                title: "確定登出?",
+                icon: 'question',
+                showCancelButton: true,
+                denyButtonText: `取消`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios
+                        .get('/admin/logout')
+                        .then(function(response) {
+                            window.location.href = "/admin";
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        })
+                        .finally(function() {
+                            // always executed
+                        });
+                }
+            });
+        }
     </script>
 
 </body>

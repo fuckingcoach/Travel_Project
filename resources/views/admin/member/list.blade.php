@@ -4,7 +4,7 @@
 
 <div class="card">
     <div class="card-header position-relative text-center">
-        <h1 class="display-5 fw-bold mb-0">會員管理</h1> <a href="#" class="btn btn-danger position-absolute top-50 end-0 translate-middle-y me-3" onclick="doDelete('form1')">刪除</a>
+        <h1 class="display-5 fw-bold mb-0">會員管理</h1> <a href="#" class="btn btn-danger position-absolute top-50 end-0 translate-middle-y me-3" onclick="doDelete('form1')">刪除選取</a>
     </div>
 
     <div class="card-body">

@@ -231,28 +231,27 @@
                 const response = await axios.post('/member/store', formData);
                 console.log(response);
 
-                if(response.data.success)
-                {
+                if (response.data.success) {
                     Swal.fire({
                         title: response.data.message,
                         icon: "success",
                         confirmButtonText: "確定",
                     }).then((result) => {
                         if (result.isConfirmed) {
+                            window.location.href = "/member/login"
                         }
                     });
-                }else{
+                } else {
                     $("#captcha").trigger('click');
                     Swal.fire({
                         title: response.data.errors,
                         icon: "error",
                         confirmButtonText: "確定",
                     }).then((result) => {
-                        if (result.isConfirmed) {
-                        }
+                        if (result.isConfirmed) {}
                     });
                 }
-            }catch(error){
+            } catch (error) {
                 console.error("登入失敗", error);
 
                 // 5. 處理後端驗證錯誤或驗證碼錯誤 (HTTP 422)

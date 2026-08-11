@@ -10,3 +10,4 @@ Route::get("/admin/viewstype", function () {
     return view("admin.views.viewstype");
 });
 Route::delete("/admin/delete", [AdminController::class, "delete"]);
+Route::get("/admin/logout", [AdminController::class, "logout"]);

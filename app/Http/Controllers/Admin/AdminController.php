@@ -41,5 +41,10 @@ class AdminController extends Controller
         }
     }
 
-    public function delete() {}
+    public function logout()
+    {
+        session()->flush();
+        session()->regenerate();
+        return redirect("/admin/home");
+    }
 }

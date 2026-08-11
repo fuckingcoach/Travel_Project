@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Controller;
 use App\Models\MemberWishlist;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class MemberController extends Controller
@@ -40,7 +41,7 @@ class MemberController extends Controller
         $member = new Member();
         $member->name = $req->name;
         $member->email = $req->email;
-        $member->pwd = $req->pwd;
+        $member->pwd = Hash::make($req->pwd);
         // 如果未提供電話，設為""
         $member->tel = ($req->tel ?? "");
         $member->save();
