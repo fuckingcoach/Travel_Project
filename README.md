@@ -37,28 +37,49 @@
 ### 專案畫面截圖
 
 #### 首頁
+
 ![首頁畫面](docs/screenshots/home.png)
+
 #### 景點列表
+
 ![景點列表頁面](docs/screenshots/views.png)
+
 #### 景點詳細內容
-![景點詳細頁面](docs/screenshots/view.png)
+
+![景點詳細頁面](docs/screenshots/view-detail.png)
+
 #### 會員登入
+
 ![登入畫面](docs/screenshots/login.png)
+
 #### 會員中心
+
 ![會員中心畫面](docs/screenshots/member.png)
+
 #### 收藏景點
+
 ![收藏景點畫面](docs/screenshots/wishlist.png)
+
 #### 後台管理
+
 ![後臺管理畫面](docs/screenshots/admin.png)
+
 #### Dashboard
+
 ![後臺儀錶板畫面](docs/screenshots/dashboard.png)
+
 ### RWD 檢查截圖
 
 #### 桌機寬度 1200px
+
 ![桌機畫面](docs/screenshots/rwd-1200.png)
+
 #### 平板寬度 768px
+
 ![平板畫面](docs/screenshots/rwd-768.png)
+
 #### 手機寬度 375px
+
 ![手機畫面](docs/screenshots/rwd-375.png)
 
 ## 資料庫設計說明
@@ -166,27 +187,24 @@ member_wishlists
 
 本專題部分前端功能透過 Axios 呼叫 Laravel API，API 負責處理資料查詢、會員資料與收藏等功能。
 
-
 ### 會員 API
 
-| 方法 | 路徑                       | 功能                 | 前端使用位置 |
-| ---- | -------------------------- | -------------------- | ------------ |
-| GET  | `/api/member/profile` | 取得目前登入會員資料 | 會員中心     |
-| POST | `/api/member/update`  | 更新會員資料        | 會員中心     |
+| 方法 | 路徑                     | 功能                     | 前端使用位置 |
+| ---- | ------------------------ | ------------------------ | ------------ |
+| GET  | `/api/member/profile`    | 取得目前登入會員資料     | 會員中心     |
+| POST | `/api/member/update`     | 更新會員資料             | 會員中心     |
 | GET  | `/api/member/checkEmail` | 確認會員信箱是否已被使用 | 會員中心     |
-| GET  | `/api/member/updatePwd` | 更新會員密碼      | 會員中心     |
-
+| GET  | `/api/member/updatePwd`  | 更新會員密碼             | 會員中心     |
 
 ### 收藏 API
 
-| 方法   | 路徑                   | 功能             | 前端使用位置       |
-| ------ | ---------------------- | ---------------- | ------------------ |
-| GET    | `/api/wishlist/list`   | 取得會員收藏列表 | 會員中心           |
-| POST   | `/api/wishlist/add`    | 新增景點收藏     | 景點頁面、收藏列表 |
-| DELETE | `/api/wishlist/delete` | 刪除景點收藏     | 景點頁面、收藏列表 |
+| 方法   | 路徑                       | 功能             | 前端使用位置       |
+| ------ | -------------------------- | ---------------- | ------------------ |
+| GET    | `/api/wishlist/list`       | 取得會員收藏列表 | 會員中心           |
+| POST   | `/api/wishlist/add`        | 新增景點收藏     | 景點頁面、收藏列表 |
+| DELETE | `/api/wishlist/delete`     | 刪除景點收藏     | 景點頁面、收藏列表 |
 | DELETE | `/api/wishlist/checkLiked` | 確認景點收藏     | 景點頁面、收藏列表 |
-| DELETE | `/api/wishlist/getLikes` | 取得景點被收藏數     | 景點頁面 |
-
+| DELETE | `/api/wishlist/getLikes`   | 取得景點被收藏數 | 景點頁面           |
 
 實際 API 路由會依照專案目前的 `routes/api.php` 設定為準。
 
@@ -347,84 +365,37 @@ Dashboard 使用統計卡片、圖表與排行方式呈現網站資料。
 
 ### 會員資料
 
-![會員資料](./images/member-profile.png)
+![會員資料](docs/screenshots/member-profile.png)
 
 點擊「會員資料」後，透過 Axios 取得會員資訊並更新畫面。
 
 ### 修改會員
 
+![修改會員](docs/screenshots/member-edit.png)
+
 會員可修改個人資料，並且可以上傳個人頭像，個人頭像、名稱、信箱會在修改完成後渲染在會員中心首頁。
 
 ### 收藏景點
 
-![收藏景點](./images/member-wishlist.png)
+![收藏景點](docs/screenshots/member-wishlist.png)
 
 收藏景點透過 API 取得資料，並在前端動態渲染收藏清單，會員可點擊愛心來收藏或取消。
 
 ### 密碼更新
 
+![密碼更新](docs/screenshots/member-pwd.png)
+
 修改登入密碼，更新前會驗證密碼是否符合規範，後端也會再做一次驗證，確認後再對密碼加密，最後更新會員資料庫。
-
-
-## 開發過程中解決的問題
-
-### API 驗證問題
-
-開發會員系統與 API 時，曾遇到 `401 Unauthenticated` 問題。
-
-透過檢查 Laravel 的：
-
-- Middleware
-- Session
-- Authentication
-- Sanctum
-- Axios Request
-- CSRF
-
-重新整理會員登入與 API 驗證流程，確保登入後的會員資料與需要驗證的 API 可以正常使用。
-
-### Eloquent Relationship
-
-景點、景點圖片、景點分類與會員收藏之間存在不同的資料關聯，因此使用 Laravel Eloquent Relationship 管理資料。
-
-例如：
-
-```php
-$views->imgs
-```
-
-取得景點相關圖片。
-
-會員則可以透過：
-
-```php
-$member->wishlist()
-```
-
-取得會員收藏資料。
-
-### Axios 非同步資料更新
-
-會員中心與收藏功能使用 Axios 呼叫 API，在不重新載入整個頁面的情況下取得及更新資料。
-
-透過前端 JavaScript 接收 API 回傳的 JSON 資料，再更新對應的畫面內容。
 
 ## 測試紀錄
 
-| 測試項目   | 測試方法                               | 結果 |
-| ---------- | -------------------------------------- | ---- |
-| 景點列表   | 開啟景點列表並確認景點資料是否正常顯示 | 通過 |
-| 景點分類   | 使用分類條件查詢景點                   | 通過 |
-| 景點搜尋   | 使用關鍵字查詢景點                     | 通過 |
-| 景點詳細頁 | 點擊景點後確認詳細資料與圖片           | 通過 |
-| 會員登入   | 使用會員帳號進行登入                   | 通過 |
-| 會員資料   | 登入後取得會員資料                     | 通過 |
-| 收藏新增   | 將景點加入收藏                         | 通過 |
-| 收藏刪除   | 取消已收藏景點                         | 通過 |
-| 收藏列表   | 查看會員收藏景點                       | 通過 |
-| 後台 CRUD  | 新增、修改、刪除景點資料               | 通過 |
-| 景點圖片   | 新增、查看與刪除景點圖片               | 通過 |
-| RWD        | 使用不同螢幕尺寸檢查版面               | 通過 |
+| 測試項目     | 測試方法                                                                   | 結果                                   |
+| ------------ | -------------------------------------------------------------------------- | -------------------------------------- | ---- |
+| php 語法檢查 | Get-ChildItem -Recurse -Include \*.php -Path app, config, routes, database | ForEach-Object { php -l $\_.FullName } | 通過 |
+| 路由檢查     | php artisan route:list                                                     | 通過                                   |
+| API          | 使用POSTMAN測試API                                                         | 通過                                   |
+
+![PostMan](docs/screenshots/postman-check.png)
 
 ## 安裝與執行方式
 
@@ -511,20 +482,6 @@ SQLite
     ↓
 localhost:8000
 ```
-
-後續可以將專案部署至雲端環境，並將資料庫由 SQLite 改為 PostgreSQL 等正式資料庫。
-
-## 未來規劃
-
-- 部署至雲端環境
-- 前端逐步導入 Vue / Nuxt
-- PostgreSQL
-- Redis
-- API 文件整理
-- 增加自動化測試
-- 完善權限管理
-- 優化 Laravel API 架構
-- Docker 化開發環境
 
 ## 開發者資訊
 
