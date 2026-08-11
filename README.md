@@ -389,12 +389,11 @@ Dashboard 使用統計卡片、圖表與排行方式呈現網站資料。
 
 ## 測試紀錄
 
-| 測試項目     | 測試方法                                                                   | 結果                                   |
-| ------------ | -------------------------------------------------------------------------- | -------------------------------------- | ---- |
-| php 語法檢查 | Get-ChildItem -Recurse -Include \*.php -Path app, config, routes, database | ForEach-Object { php -l $\_.FullName } | 通過 |
-| 路由檢查     | php artisan route:list                                                     | 通過                                   |
-| API          | 使用POSTMAN測試API                                                         | 通過                                   |
-
+| 測試項目     | 測試方法                                                                                                                       | 結果 |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------ | ---- |
+| php 語法檢查 | `Get-ChildItem -Recurse -Include *.php -Path app, config, routes, database \| ForEach-Object { php -l $_.FullName }` | 通過 |
+| 路由檢查     | `php artisan route:list`                                                                                                       | 通過 |
+| API          | `使用POSTMAN測試API`                                                                                                             | 通過 |
 ![PostMan](docs/screenshots/postman-check.png)
 
 ## 安裝與執行方式
