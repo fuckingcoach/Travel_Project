@@ -54,7 +54,7 @@
                     <!-- id for js, name for backend -->
                     <div class="text-center">
                         <input type="text" id="keyword"
-                            class="form-control mt-3 border border-dark" placeholder="關鍵字..." onkeyup="getList()">
+                            class="form-control mt-3 border border-dark" placeholder="關鍵字...">
                     </div>
                 </div>
                 <div class="col-4 text-center">
@@ -95,6 +95,9 @@
     </div>
 </div>
 <script>
+    let isComposing = false;
+    let timer = null;
+
     // 頁面載入完成時
     $(function() {
         $("#keyword").autocomplete({
@@ -237,5 +240,35 @@
             }
         });
     };
+
+    function debounceSearch(keyword, delay = 300) {
+        clearTimeout(timer);
+        timer = setTimeout(function() {
+            getList();
+        });
+    }
+
+    $("#keyword").on("compositionstart", function() {
+        isComposing = true;
+        console.log(isComposing);
+    });
+
+    $("#keyword").on("compositionend", function() {
+        isComposing = false;
+        console.log(isComposing);
+        getList();
+    });
+
+    $("#keyword").on("keydown", function(e) {
+        if (e.key === 'Enter' && !isComposing) {
+            clearTimeout(timer);
+            getList();
+        }
+    });
+
+    $("#keyword").on("input", function() {
+        if (isComposing) return;
+        debounceSearch($("#keyword").val(), 300);
+    });
 </script>
 @endsection

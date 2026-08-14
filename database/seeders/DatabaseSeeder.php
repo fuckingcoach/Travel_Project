@@ -448,6 +448,7 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ],
         ]);
+
         $this->call([
             ManagerSeeder::class,
             MemberSeeder::class,

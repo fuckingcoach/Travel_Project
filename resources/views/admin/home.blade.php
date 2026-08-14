@@ -316,14 +316,18 @@
                 });
             },
             updatelikeChart() {
-                likeChart.data.labels = [...this.label_like_x];
-                likeChart.data.datasets[0].data = [...this.data_like_y];
+                const vm = this;
+                if (!vm.likeChart) return;
+                vm.likeChart.data.labels = [...vm.label_like_x];
+                vm.likeChart.data.datasets[0].data = [...vm.data_like_y];
 
                 likeChart.update();
             },
             updatelookChart() {
-                lookChart.data.labels = [...this.label_look_x];
-                lookChart.data.datasets[0].data = [...this.data_look_y];
+                const vm = this;
+                if (!vm.lookChart) return;
+                vm.lookChart.data.labels = [...vm.label_look_x];
+                vm.lookChart.data.datasets[0].data = [...vm.data_look_y];
 
                 lookChart.update();
             },
